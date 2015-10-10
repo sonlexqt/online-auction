@@ -1,0 +1,1 @@
+var filtersModule = angular.module('dkmhApp.Filters', []);

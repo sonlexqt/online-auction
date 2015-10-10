@@ -1,0 +1,5 @@
+# WebStorm project settings folder
+.idea/
+
+# npm packages
+node_modules/
