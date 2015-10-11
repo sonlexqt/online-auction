@@ -46,3 +46,7 @@ body {
 footer {
     margin: 50px 0;
 }
+
+.my-item-image{
+    max-width: 50px;
+}

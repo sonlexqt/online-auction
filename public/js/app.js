@@ -23,6 +23,12 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/sign-in', {
 			templateUrl: 'templates/sign-in.html'
 		})
+		.when('/my-items', {
+			templateUrl: 'templates/my-items.html'
+		})
+		.when('/history', {
+			templateUrl: 'templates/history.html'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});

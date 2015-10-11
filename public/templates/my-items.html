@@ -1,0 +1,93 @@
+<div class="row" ng-controller="MyItemsController">
+    <div class="col-md-12 col-lg-12 col-xs-12">
+        <h1>My Items</h1>
+        <hr/>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#add-new-item-modal">Add new item</button>
+        <hr/>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Expired Date</th>
+                    <th>Starting Price</th>
+                    <th>Current Price</th>
+                    <th>Status</th>
+                    <th>BuyerEmail</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in myItems" data-itemid="{{item.$id}}">
+                    <td>{{ $index + 1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.description | semanticValue}}</td>
+                    <td>
+                        <img ng-src="{{item.image}}" class="my-item-image"/>
+                    </td>
+                    <td>{{item.expiredDate | readableDate}}</td>
+                    <td>{{item.startingPrice}}</td>
+                    <td>{{item.currentPrice}}</td>
+                    <td>{{item.status | semanticValue}}</td>
+                    <td>{{item.buyerEmail | semanticValue}}</td>
+                    <td>
+                        <button class="btn btn-danger">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="add-new-item-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add new item</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="item-name">Name</label>
+                            <input required type="text" class="form-control" id="item-name" ng-model="itemName">
+                        </div>
+                        <div class="form-group">
+                            <label for="item-image">Image</label>
+                            <input required type="file" class="form-control" id="item-image" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="item-description">Description</label>
+                            <textarea required class="form-control" rows="3" id="item-description" ng-model="itemDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-category">Category</label>
+                            <select required class="form-control" id="item-category" ng-model="itemCategory">
+                                <option value="electronics">Electronics</option>
+                                <option value="home-garden">Home & Garden</option>
+                                <option value="jewelry-fashion">Jewelry & Fashion</option>
+                                <option value="sports-recreation">Sports & Recreation</option>
+                                <option value="specialty-shops">Specialty Shops</option>
+                                <option value="gift-cards">Gift Cards</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-expiredDate">Expired Date</label>
+                            <input required type="datetime-local" class="form-control" id="item-expiredDate" ng-model="itemExpiredDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="item-starting-price">Starting Price ($)</label>
+                            <input required type="number" class="form-control" id="item-starting-price" ng-model="itemStartingPrice">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a type="submit" class="btn btn-primary" ng-click="addNewItem()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
