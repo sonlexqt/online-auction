@@ -59,5 +59,32 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
 
 controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray){
     var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
-    $scope.allItems = $firebaseArray(firebaseRef.child('items'));
+
+    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
+
+    $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice){
+        if (!$rootScope.currentUser){
+            alert("Please sign in before bidding for items !");
+        } else if (itemNewPrice <= itemCurrentPrice){
+            alert("Please bid a value >= current item price !");
+        }
+        else {
+            $scope.currentItem = {
+                id: itemId,
+                name: itemName,
+                value: itemNewPrice
+            };
+            $('#submit-bid-modal').modal('show');
+        }
+
+    };
+
+    $scope.submitBid = function(){
+        firebaseRef.child('items').child($scope.currentItem.id).update({
+            currentPrice: $scope.currentItem.value,
+            currentBuyerId: $rootScope.currentUser.uid,
+            currentBuyerEmail: $rootScope.currentUser.email
+        });
+        $('#submit-bid-modal').modal('hide');
+    };
 }]);

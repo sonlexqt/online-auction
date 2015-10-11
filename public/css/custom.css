@@ -4,6 +4,7 @@ body {
 
 .slide-image {
     width: 100%;
+    max-height: 200px;
 }
 
 .carousel-holder {
@@ -16,7 +17,7 @@ body {
 }
 
 .caption {
-    height: 130px;
+    height: 155px;
     overflow: hidden;
 }
 
@@ -26,12 +27,6 @@ body {
 
 .thumbnail img {
     width: 100%;
-}
-
-.ratings {
-    padding-right: 10px;
-    padding-left: 10px;
-    color: #d17581;
 }
 
 .thumbnail {
@@ -49,4 +44,8 @@ footer {
 
 .my-item-image{
     max-width: 50px;
+}
+
+.bid-submit-btn{
+    margin-top: 4px;
 }
