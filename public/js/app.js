@@ -17,6 +17,12 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/', {
 			templateUrl: 'templates/main.html'
 		})
+		.when('/register', {
+			templateUrl: 'templates/register.html'
+		})
+		.when('/sign-in', {
+			templateUrl: 'templates/sign-in.html'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
