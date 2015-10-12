@@ -16,7 +16,7 @@ controllersModule.controller('RegisterController', ['$scope', 'AuthService', fun
 
 controllersModule.controller('SignInController', ['$scope', 'AuthService', function($scope, AuthService){
     $scope.doSignIn = function(){
-        AuthService.signIn($scope.signInEmail, $scope.signInPassword);
+        AuthService.signIn($scope.signInEmail, $scope.signInPassword, false);
     }
 }]);
 
@@ -86,5 +86,22 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             currentBuyerEmail: $rootScope.currentUser.email
         });
         $('#submit-bid-modal').modal('hide');
+    };
+}]);
+
+controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope){
+    var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
+
+    $scope.updateDeposit = function(depositAmount){
+        var newBalance = $rootScope.currentUser.balance + depositAmount;
+        firebaseRef.child('users').child($rootScope.currentUser.uid).update({
+            balance: newBalance
+        }, function(err){
+            if (err){
+                $rootScope.errorMsg = err;
+            } else {
+                $rootScope.successMsg = 'Deposit successfully !';
+            }
+        });
     };
 }]);

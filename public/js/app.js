@@ -29,6 +29,9 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/history', {
 			templateUrl: 'templates/history.html'
 		})
+		.when('/deposit', {
+			templateUrl: 'templates/deposit.html'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});

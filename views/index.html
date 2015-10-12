@@ -35,6 +35,9 @@
                     <li>
                         <a href="/history">Auction History</a>
                     </li>
+                    <li>
+                        <a href="/deposit">Deposit</a>
+                    </li>
                 </ul>
 
                 <ul ng-if="!currentUser" class="nav navbar-nav navbar-right">
@@ -49,6 +52,9 @@
                 <ul ng-if="currentUser" class="nav navbar-nav navbar-right">
                     <li>
                         <a>Signed in as {{currentUser.email}}</a>
+                    </li>
+                    <li>
+                        <a>Balance: {{currentUser.balance}}$</a>
                     </li>
                     <li>
                         <a style="cursor: pointer" ng-click="doSignOut()">Sign Out</a>
