@@ -64,7 +64,7 @@
                             </tr>
                         </table>
                         <div class="price-box">
-                            <button class="input-price">BID Now</button>
+                            <input type="number" min="{{item.currentPrice}}" class="input-price" placeholder="value">
                         </div>
                         <div class="bid-user">
                             {{item.currentBuyerEmail | semanticValue}}

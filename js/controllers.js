@@ -60,7 +60,7 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
 controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location){
     var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
 
-    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate").limitToLast(3));
+    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate").limitToLast(4));
 
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice){
         if (!$rootScope.currentUser){
