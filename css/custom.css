@@ -199,6 +199,7 @@ table.timing .end-time {
     border-radius: 100px;
     box-shadow: inset 0 0 10px 0 #000;
 }
+
 .card-panel .price-box .input-price {
     width: 232px;
     height: 96px;
@@ -213,6 +214,12 @@ table.timing .end-time {
     text-align: center;
     box-shadow: inset 0 0 10px 0 #000;
 }
+
+.card-panel .price-box .input-price:focus {
+    outline: none;
+    border: none;
+}
+
 .card-panel .bid-user {
     color: #ffffff;
     font-family: MyriadPro;
