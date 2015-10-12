@@ -48,7 +48,7 @@
                     <div class="card-panel">
                         <a href="#" class="button bid-btn" title="Bid now"></a>
                         <div class="item-name">
-                            {{item.name}}
+                            <b>{{item.name | uppercase}}</b>
                             <br>
                             End: {{item.expiredDate | timeLeft}}
                         </div>
