@@ -11,10 +11,6 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
         }).then(function(userData) {
             $rootScope.successMsg = 'Done creating new user !';
             $rootScope.errorMsg = null;
-            //ref.child("users").child(authData.uid).set({
-            //    provider: authData.provider,
-            //    name: getName(authData)
-            //});
             _signIn(registerEmail, registerPassword, true);
         }).catch(function(error) {
             $rootScope.successMsg = null;
