@@ -67,7 +67,7 @@ ul.custom-nav li .director {
 /*BODY*/
 .body {
     background-color: #fff;
-    min-height: 50%;
+    min-height: 200px;
 }
 .body-inner {
     padding: 20px 0;
