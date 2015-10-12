@@ -72,16 +72,22 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 console.log('after error');
                 $location.path('/sign-in');
             });
+        } else if (!itemNewPrice) {
+            swal({
+                title: 'Invalid Value',
+                text: 'Please enter a valid value!',
+                type: 'error'
+            });
         } else if (itemNewPrice > $rootScope.currentUser.balance) {
             swal({
                 title: 'Not enough budget',
-                text: 'Please deposit before continuing.',
+                text: 'Please deposit before continuing!',
                 type: 'error'
             });
         } else if (itemNewPrice <= itemCurrentPrice) {
             swal({
                 title: 'Invalid value',
-                text: 'Please bid a value greater than current item price !',
+                text: 'Please bid a value greater than current item price!',
                 type: 'error'
             });
         } else {
@@ -92,14 +98,20 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             };
             swal({
                 title: "Are you sure?",
-                text: 'Submit bid for <b>' +$scope.currentItem.itemName+ '</b> for <b>$' +$scope.currentItem.value+ '</b>?',
+                text: 'Submit bid for <b>' + $scope.currentItem.name + '</b> for <b>$' + $scope.currentItem.value + '</b>?',
                 type: 'info',
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
+                // confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, Place my Bid!",
-                closeOnConfirm: true
+                closeOnConfirm: false,
+                html: true,
             }, function() {
                 $scope.submitBid();
+                swal({
+                    title: 'Success',
+                    text: 'Your bid has been placed!',
+                    type: 'success'
+                });
             });
         }
 

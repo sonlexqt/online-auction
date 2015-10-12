@@ -4,7 +4,8 @@ var dkmhApp = angular.module('dkmhApp', [
 	'dkmhApp.Services',
 	'dkmhApp.Filters',
 	'dkmhApp.Controllers',
-	'dkmhApp.Directives'
+	'dkmhApp.Directives',
+	'timer'
 ]);
 
 dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
