@@ -69,6 +69,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 text: 'Please sign in before bidding for items !',
                 type: 'error'
             }, function() {
+                console.log('after error');
                 $location.path('/sign-in');
             });
         } else if (itemNewPrice > $rootScope.currentUser.balance){
