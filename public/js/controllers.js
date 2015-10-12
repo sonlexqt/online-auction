@@ -65,6 +65,8 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice){
         if (!$rootScope.currentUser){
             alert("Please sign in before bidding for items !");
+        } else if (itemNewPrice > $rootScope.currentUser.balance){
+            alert("Not enough budget. Please deposit before continuing.");
         } else if (itemNewPrice <= itemCurrentPrice){
             alert("Please bid a value >= current item price !");
         }
