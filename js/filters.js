@@ -23,3 +23,17 @@ filtersModule.filter('semanticValue', function() {
         }
     };
 });
+
+filtersModule.filter('dateOnly', function() {
+    return function(input) {
+        var dateObjectFromInput = new Date(input);
+        return moment(dateObjectFromInput).format('MMM DD, YYYY');
+    }
+});
+
+filtersModule.filter('timeOnly', function() {
+    return function(input) {
+        var dateObjectFromInput = new Date(input);
+        return moment(dateObjectFromInput).format('HH') + 'h' + moment(dateObjectFromInput).format('mm');
+    }
+});

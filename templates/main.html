@@ -1,89 +1,80 @@
-<div class="row" ng-controller="MainController">
-    <div class="col-md-3">
-        <p class="lead">Live Auctions</p>
-        <div class="list-group">
-            <a href="#" class="list-group-item active">All Auctions</a>
-            <a href="#" class="list-group-item">Electronics</a>
-            <a href="#" class="list-group-item">Home & Garden</a>
-            <a href="#" class="list-group-item">Jewelry & Fashion</a>
-            <a href="#" class="list-group-item">Sports & Recreation</a>
-            <a href="#" class="list-group-item">Specialty Shops</a>
-            <a href="#" class="list-group-item">Gift Cards</a>
-        </div>
-    </div>
-    <div class="col-md-9">
-        <div class="row carousel-holder">
-            <div class="col-md-12">
-                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <img class="slide-image" ng-src="http://placehold.it/800x300" alt="">
-                        </div>
-                        <div class="item">
-                            <img class="slide-image" ng-src="http://placehold.it/800x300" alt="">
-                        </div>
-                        <div class="item">
-                            <img class="slide-image" ng-src="http://placehold.it/800x300" alt="">
-                        </div>
-                    </div>
-                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </a>
-                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-
-            <!-- LIST OF ITEMS -->
-            <div style="text-align:center;" ng-hide="allItems.length > 0">
-                <br>
-                <h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></h3>
-                Loading...
-                <br>
-            </div>
-            <div class="col-sm-4 col-lg-4 col-md-4" ng-repeat="item in allItems" data-itemid="{{item.$id}}" ng-show="allItems.length > 0">
-                <div class="thumbnail">
-                    <img ng-src="{{item.image}}" alt="">
-                    <div class="caption text-center">
-                        <h4 class="pull-right">${{item.currentPrice}}</h4>
-                        <h4><a href="#">{{item.name}}</a>
+<!-- <div class="row">
+    <div class="col-sm-4 col-lg-4 col-md-4" ng-repeat="item in allItems" data-itemid="{{item.$id}}">
+        <div class="thumbnail">
+            <img ng-src="{{item.image}}" alt="">
+            <div class="caption text-center">
+                <h4 class="pull-right">${{item.currentPrice}}</h4>
+                <h4><a href="#">{{item.name}}</a>
                         </h4>
-                        <p class="bid-last-user pull-right">{{item.currentBuyerEmail | semanticValue}}</p>
-                        <h4 class="bid-time">{{item.expiredDate | timeLeft}}</h4>
-                        <input type="number" class="bid-value-input form-control" ng-model="item.newPrice"/>
-                        <a class="bid-submit-btn btn btn-primary" ng-click="setCurrentItem(item.$id, item.name, item.newPrice, item.currentPrice)">Bid Now</a>
+                <p class="bid-last-user pull-right">{{item.currentBuyerEmail | semanticValue}}</p>
+                <h4 class="bid-time">{{item.expiredDate | timeLeft}}</h4>
+                <input type="number" class="bid-value-input form-control" ng-model="item.newPrice" />
+                <a class="bid-submit-btn btn btn-primary" ng-click="setCurrentItem(item.$id, item.name, item.newPrice, item.currentPrice)">Bid Now</a>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div ng-controller="MainController">
+    <div class="loading-container" ng-hide="allItems.length > 0">
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="cssload-loader">
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+            <div class="cssload-side"></div>
+        </div>
+    </div>
+    <ul class="card-list" ng-show="allItems.length > 0">
+        <li ng-repeat="item in allItems" data-itemid="{{item.$id}}">
+            <div class="card-container">
+                <img src="images/price-marker.png" class="price-maker-bottom">
+                <div class="card">
+                    <div class="top-menu">
+                        <a href="#" class="button info-button">
+                            <img src="images/btn-info.png" title="Production details">
+                        </a>
+                    </div>
+                    <img class="preview" ng-src="{{item.image}}">
+                    <div class="description hidden">
+                        {{item.description}}
+                    </div>
+                    <div class="card-panel">
+                        <a href="#" class="button bid-btn" title="Bid now"></a>
+                        <div class="item-name">
+                            {{item.name}}
+                            <br>
+                            End: {{item.expiredDate | timeLeft}}
+                        </div>
+                        <table class="timing">
+                            <tr>
+                                <td class="start-date">Oct 12, 2015</td>
+                                <td rowspan="2"><img src="images/icon-clock.png"></td>
+                                <td class="end-date">{{item.expiredDate | dateOnly}}</td>
+                            </tr>
+                            <tr>
+                                <td class="start-time">01h53</td>
+                                <td class="end-time">{{item.expiredDate | timeOnly}}</td>
+                            </tr>
+                        </table>
+                        <div class="price-box">
+                            <button class="input-price">BID Now</button>
+                        </div>
+                        <div class="bid-user">
+                            {{item.currentBuyerEmail | semanticValue}}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="submit-bid-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Confirm submitting bid</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to submit bid for <strong>{{currentItem.name}}</strong> for <strong>{{currentItem.value}}$</strong> ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <a class="btn btn-primary btn-confirm-bid" ng-click="submitBid()" data-currentitemid="{{currentItem.id}}">Yes</a>
+                <div class="price">
+                    ${{item.currentPrice}}
                 </div>
             </div>
-        </div>
-    </div>
+        </li>
+    </ul>
 </div>
-<!-- /.row -->

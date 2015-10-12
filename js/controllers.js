@@ -60,12 +60,12 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
 controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location){
     var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
 
-    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
+    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate").limitToLast(3));
 
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice){
         if (!$rootScope.currentUser){
-            sweetAlert({
-                title: 'Error',
+            swal({
+                title: 'Not signed-in',
                 text: 'Please sign in before bidding for items !',
                 type: 'error'
             }, function() {
@@ -73,14 +73,14 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 $location.path('/sign-in');
             });
         } else if (itemNewPrice > $rootScope.currentUser.balance){
-            sweetAlert({
-                title: 'Error',
-                text: 'Not enough budget. Please deposit before continuing.',
+            swal({
+                title: 'Not enough budget',
+                text: 'Please deposit before continuing.',
                 type: 'error'
             });
         } else if (itemNewPrice <= itemCurrentPrice){
-            sweetAlert({
-                title: 'Error',
+            swal({
+                title: 'Invalid value',
                 text: 'Please bid a value greater than current item price !',
                 type: 'error'
             });
@@ -91,7 +91,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 name: itemName,
                 value: itemNewPrice
             };
-            $('#submit-bid-modal').modal('show');
+            // $('#submit-bid-modal').modal('show');
         }
 
     };
@@ -102,7 +102,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
-        $('#submit-bid-modal').modal('hide');
+        // $('#submit-bid-modal').modal('hide');
     };
 }]);
 
