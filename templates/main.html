@@ -37,7 +37,7 @@
                 <img src="images/price-marker.png" class="price-maker-bottom">
                 <div class="card">
                     <div class="top-menu">
-                        <a href="#" class="button info-button">
+                        <a class="button info-button" href="#">
                             <img src="images/btn-info.png" title="Production details">
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                         {{item.description}}
                     </div>
                     <div class="card-panel">
-                        <a href="#" class="button bid-btn" title="Bid now"></a>
+                        <a class="button bid-btn" title="Bid now" ng-click="setCurrentItem(item.$id, item.name, item.newPrice, item.currentPrice)"></a>
                         <div class="item-name">
                             <b>{{item.name | uppercase}}</b>
                             <br>
