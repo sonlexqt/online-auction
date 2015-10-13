@@ -1,5 +1,5 @@
 <div ng-controller="MainController">
-    <div class="loading-container" ng-hide="allItems.length > 0">
+    <div class="loading-container" ng-if="!(allItems.length > 0)">
         <br>
         <br>
         <br>
@@ -15,7 +15,7 @@
             <div class="cssload-side"></div>
         </div>
     </div>
-    <ul class="card-list" ng-show="allItems.length > 0">
+    <ul class="card-list" ng-if="allItems.length > 0">
         <li ng-repeat="item in allItems" data-itemid="{{item.$id}}">
             <div class="card-container">
                 <img src="images/price-marker.png" class="price-maker-bottom">
@@ -39,7 +39,7 @@
                         <table class="timing">
                             <tr>
                                 <td class="start-date">Oct 12, 2015</td>
-                                <td rowspan="2"><img src="images/icon-clock.png"></td>
+                                <td rowspan="2"><img src="images/icon-clock.png" style="position:relative;left:6px"></td>
                                 <td class="end-date">{{item.expiredDate | dateOnly}}</td>
                             </tr>
                             <tr>
@@ -48,7 +48,7 @@
                             </tr>
                         </table>
                         <div class="price-box">
-                            <input type="number" class="input-price" ng-model="item.newPrice">
+                            <input type="number" class="input-price" ng-model="item.newPrice" placeholder="Your Bid">
                         </div>
                         <div class="bid-user">
                             {{item.currentBuyerEmail | semanticValue}}

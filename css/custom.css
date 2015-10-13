@@ -2,22 +2,40 @@
     margin: 0;
     padding: 0;
 }
+
 body {
     background-color: #4285f4;
 }
+
 @font-face {
     font-family: MyriadPro;
     src: url(../fonts/MyriadPro-Regular.otf);
 }
+
 .hidden {
     display: none;
 }
+
+
 /*HEADER*/
+
 .header {
     box-sizing: border-box;
     height: 138px;
     background-color: #4285f4;
 }
+
+.header .user-panel {
+    position: absolute;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    height: 80px;
+    right: -30px;
+    top: 18px;
+    width: 180px;
+}
+
 .container {
     width: 835px;
     margin: 0 auto;
@@ -25,23 +43,28 @@ body {
     text-align: center;
     box-sizing: border-box;
 }
+
 .header-inner {
     height: inherit;
 }
+
 .logo {
     position: absolute;
     top: 17px;
     left: 0;
 }
+
 .title {
     padding-top: 17px;
 }
+
 ul.custom-nav {
     list-style-type: none;
     position: absolute;
     bottom: 0;
     left: 225px;
 }
+
 ul.custom-nav li {
     display: inline-block;
     height: 55px;
@@ -51,40 +74,49 @@ ul.custom-nav li {
     padding: 10px 0;
     transition: all 0.2s;
 }
+
 ul.custom-nav li:hover {
     border-bottom: 6px solid #db4337;
     cursor: pointer;
 }
+
 ul.custom-nav li .director {
     font-size: 27.5px;
     font-family: 'MyriadPro';
-    text-decoration : none;
+    text-decoration: none;
     color: #ffffff;
     line-height: 79px;
     padding: 0 10px;
 }
 
+
 /*BODY*/
+
 .body {
     background-color: #fff;
     min-height: 200px;
 }
+
 .body-inner {
     padding: 20px 0;
     text-align: center;
 }
+
 ul.card-list {
     list-style-type: none;
     padding: 10px 0;
 }
+
 ul.card-list li {
     display: inline-block;
     padding: 0 10px;
     vertical-align: top;
 }
+
 .card-container {
     position: relative;
 }
+
 .card {
     width: 267px;
     height: 363px;
@@ -95,18 +127,22 @@ ul.card-list li {
     overflow: hidden;
     position: relative;
 }
-.card:hover .card-panel{
+
+.card:hover .card-panel {
     top: 63px;
 }
-.card .top-menu{
+
+.card .top-menu {
     height: 63px;
-    position:  relative;
+    position: relative;
 }
+
 .price-maker-bottom {
     position: absolute;
     left: -10px;
     top: 15px;
 }
+
 .price {
     width: 92px;
     height: 33px;
@@ -121,17 +157,21 @@ ul.card-list li {
     top: 15px;
     box-shadow: 0 0 10px 0 #5f5e5e;
 }
+
 a.button {
     display: inline-block;
 }
+
 .top-menu .info-button {
     position: absolute;
     top: 15px;
     right: 10px;
 }
+
 .card .preview {
     height: 157px;
 }
+
 .card .description {
     text-align: left;
     padding: 5px 15px;
@@ -139,6 +179,7 @@ a.button {
     color: #807b7b;
     font-family: 'MyriadPro';
 }
+
 .card .card-panel {
     width: inherit;
     height: 300px;
@@ -148,6 +189,7 @@ a.button {
     background-color: #db4337;
     transition: all 0.2s;
 }
+
 a.bid-btn {
     width: 53px;
     height: 53px;
@@ -160,6 +202,7 @@ a.bid-btn {
     position: relative;
     top: -32px;
 }
+
 .card-panel .item-name {
     color: #ffffff;
     font-size: 18.51px;
@@ -167,30 +210,37 @@ a.bid-btn {
     margin-top: -20px;
     padding-bottom: 20px;
 }
+
 table.timing {
-    width:  100%;
+    width: 100%;
 }
+
 table.timing td {
     font-family: MyriadPro;
     color: #ffffff;
     font-size: 15.29px;
 }
+
 table.timing .start-date {
     border-bottom: 1px solid #ffffff;
     text-align: center;
 }
+
 table.timing .end-date {
     border-bottom: 1px solid #ffffff;
     text-align: center;
 }
+
 table.timing .start-time {
     font-size: 30px;
     text-align: center;
 }
+
 table.timing .end-time {
     font-size: 30px;
     text-align: center;
 }
+
 .card-panel .price-box {
     width: 232px;
     height: 96px;
@@ -207,7 +257,7 @@ table.timing .end-time {
     background-color: #4bb549;
     font-family: MyriadPro;
     color: #ffffff;
-    font-size: 71.62px;
+    font-size: 55px;
     line-height: 96px;
     border-radius: 100px;
     border: none;
@@ -227,6 +277,7 @@ table.timing .end-time {
     text-align: center;
     padding: 5px 0;
 }
+
 .footer {
     background-color: #4285f4;
     height: 55px;
@@ -237,10 +288,12 @@ ul.links {
     float: left;
     padding-top: 7px;
 }
+
 ul.links li {
     display: inline-block;
     vertical-align: bottom;
 }
+
 .copyright {
     color: #ffffff;
     font-family: MyriadPro;

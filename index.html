@@ -35,9 +35,26 @@
         <div class="container header-inner">
             <img class="logo" src="images/logo.png">
             <img class="title" src="images/title.png">
+            <div class="user-panel">
+                <div ng-if="!currentUser">
+                    <h4>Not signed-in!</h4>
+                    <ul>
+                        <li><a href="/sign-in">Sign In</a></li>
+                        <li><a href="/register">Register</a></li>
+                    </ul>
+                </div>
+                <div ng-if="currentUser">
+                    <p>Welcome, <b>{{currentUser.email}}</b>!</p>
+                    Your Balance: <b>${{currentUser.balance}}<b>
+                    <ul>
+                        <li><a href="/deposit">Top-up</a></li>
+                        <li><a href="#" ng-click="doSignOut()">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
             <ul class="custom-nav">
-                <li><a href="#" class="director">TOP CHARTS</a></li>
-                <li><a href="#" class="director">SOLD</a></li>
+                <li><a href="/" class="director">ACTIVE BIDS</a></li>
+                <li><a href="/test" class="director">SOLD</a></li>
                 <li><a href="#" class="director">EXPLORE</a></li>
             </ul>
         </div>

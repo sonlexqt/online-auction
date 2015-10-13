@@ -118,6 +118,11 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     };
 
     $scope.submitBid = function() {
+        console.log($scope.currentItem.id,{
+            currentPrice: $scope.currentItem.value,
+            currentBuyerId: $rootScope.currentUser.uid,
+            currentBuyerEmail: $rootScope.currentUser.email
+        })
         firebaseRef.child('items').child($scope.currentItem.id).update({
             currentPrice: $scope.currentItem.value,
             currentBuyerId: $rootScope.currentUser.uid,
