@@ -42,12 +42,12 @@
                         </div>
                         <table class="timing">
                             <tr>
-                                <td class="start-date">Oct 12, 2015</td>
+                                <td class="start-date">{{item.startDate | dateOnly}}</td>
                                 <td rowspan="2"><img src="images/icon-clock.png" style="position:relative;left:6px"></td>
                                 <td class="end-date">{{item.expiredDate | dateOnly}}</td>
                             </tr>
                             <tr>
-                                <td class="start-time">01h53</td>
+                                <td class="start-time">{{item.startDate | timeOnly}}</td>
                                 <td class="end-time">{{item.expiredDate | timeOnly}}</td>
                             </tr>
                         </table>

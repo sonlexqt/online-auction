@@ -24,8 +24,10 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
     var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
-    console.log('$scope.myItems');
-    console.log($scope.myItems);
+}]);
+
+controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
+    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     angular.element('#item-image').change(function(e) {
         var imageFile = this.files[0];
@@ -42,7 +44,7 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
             name: $scope.itemName,
             description: $scope.itemDescription,
             image: $scope.itemImage,
-            category: $scope.itemCategory,
+            // category: $scope.itemCategory,
             startDate: Date.now(),
             expiredDate: expiredDate,
             startingPrice: $scope.itemStartingPrice,
@@ -51,9 +53,13 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
             ownerEmail: $rootScope.currentUser.email,
             status: 'active'
         };
-
+        console.log('item',item);
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
-            $('#add-new-item-modal').modal('hide');
+            swal({
+                title: 'Success',
+                text: 'Your new item is ready for bidding!',
+                type: 'success',
+            });
         });
     };
 }]);
@@ -146,7 +152,7 @@ controllersModule.controller('DepositController', ['$scope', '$rootScope', funct
                 $rootScope.errorMsg = err;
             } else {
                 $rootScope.successMsg = 'Deposit successfully !';
-                $scope.depositAmount = 0;
+                $scope.depositAmount = '';
             }
         });
     };

@@ -27,6 +27,9 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/my-items', {
 			templateUrl: 'templates/my-items.html'
 		})
+		.when('/new-item', {
+			templateUrl: 'templates/new-item.html'
+		})
 		.when('/history', {
 			templateUrl: 'templates/history.html'
 		})

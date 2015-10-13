@@ -304,7 +304,6 @@ ul.links li {
 
 /*Forms*/
 button{
-  width:100px;
   background:#3399cc;
   display:block;
   margin:0 auto;
@@ -323,7 +322,7 @@ button:hover{
 }
 
 .custom-form {
-  width:400px;
+  width:600px;
   margin:0 auto;
   margin-top:8px;
   margin-bottom:2%;
@@ -345,12 +344,12 @@ button:hover{
   padding:6% 4%;
 }
 
-.custom-form input[type="email"],input[type="password"],input[type="number"]{
+.custom-form input:not([type="submit"]),textarea{
   width:92%;
   background:#fff;
   margin-bottom:4%;
   border:1px solid #ccc;
-  padding:4%;
+  padding:2%;
   font-family:'Open Sans',sans-serif;
   font-size:95%;
   color:#555;
@@ -360,7 +359,7 @@ button:hover{
   width:100%;
   background:#3399cc;
   border:0;
-  padding:4%;
+  padding:3%;
   font-family:'Open Sans',sans-serif;
   font-size:100%;
   color:#fff;
