@@ -43,6 +43,7 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
             description: $scope.itemDescription,
             image: $scope.itemImage,
             category: $scope.itemCategory,
+            startDate: Date.now(),
             expiredDate: expiredDate,
             startingPrice: $scope.itemStartingPrice,
             currentPrice: $scope.itemStartingPrice,
@@ -60,7 +61,7 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
 controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location) {
     var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
 
-    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate").limitToLast(4));
+    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
 
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
@@ -69,8 +70,9 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 text: 'Please sign in before bidding for items !',
                 type: 'error'
             }, function() {
-                console.log('after error');
-                $location.path('/sign-in');
+                $rootScope.$apply(function() {
+                    $location.path('/sign-in');
+                });
             });
         } else if (!itemNewPrice) {
             swal({
@@ -118,17 +120,12 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     };
 
     $scope.submitBid = function() {
-        console.log($scope.currentItem.id,{
-            currentPrice: $scope.currentItem.value,
-            currentBuyerId: $rootScope.currentUser.uid,
-            currentBuyerEmail: $rootScope.currentUser.email
-        })
         firebaseRef.child('items').child($scope.currentItem.id).update({
             currentPrice: $scope.currentItem.value,
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
-        // $('#submit-bid-modal').modal('hide');
+        $scope.$apply();
     };
 }]);
 

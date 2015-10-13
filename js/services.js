@@ -33,7 +33,9 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
             $rootScope.currentUser = $firebaseObject(ref.child('users').child(user.auth.uid));
             $rootScope.errorMsg = null;
             $rootScope.successMsg = null;
-            $location.path('/');
+            $rootScope.$apply(function() {
+                $location.path('/');
+            })
         }, function(error) {
             $rootScope.successMsg = null;
             $rootScope.errorMsg = error;
