@@ -40,14 +40,14 @@
                     <h4>Not signed-in!</h4>
                     <ul>
                         <li><a href="/sign-in">Sign In</a></li>
-                        <li><a href="/register">Register</a></li>
+                        <li><a href="/sign-up">Sign Up</a></li>
                     </ul>
                 </div>
                 <div ng-if="currentUser">
                     <p>Welcome, <b>{{currentUser.email}}</b>!</p>
                     Your Balance: <b>${{currentUser.balance}}<b>
                     <a href="/my-items">Items</a>
-                    <a href="/deposit">Top-up</a>
+                    <a href="/top-up">Top-up</a>
                     <a href="#" ng-click="doSignOut()">Sign Out</a>
                 </div>
             </div>

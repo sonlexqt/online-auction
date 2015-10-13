@@ -137,8 +137,8 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
 controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope) {
     var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
-    $scope.updateDeposit = function(depositAmount) {
-        var newBalance = $rootScope.currentUser.balance + depositAmount;
+    $scope.updateDeposit = function() {
+        var newBalance = $rootScope.currentUser.balance + $scope.depositAmount;
         firebaseRef.child('users').child($rootScope.currentUser.uid).update({
             balance: newBalance
         }, function(err) {
@@ -146,6 +146,7 @@ controllersModule.controller('DepositController', ['$scope', '$rootScope', funct
                 $rootScope.errorMsg = err;
             } else {
                 $rootScope.successMsg = 'Deposit successfully !';
+                $scope.depositAmount = 0;
             }
         });
     };

@@ -322,7 +322,7 @@ button:hover{
   background:#2288bb;
 }
 
-.auth-form {
+.custom-form {
   width:400px;
   margin:0 auto;
   margin-top:8px;
@@ -331,7 +331,7 @@ button:hover{
   -webkit-transition:opacity 1s;
 }
 
-.auth-form h1{
+.custom-form h1{
   background:#3399cc;
   padding:20px 0;
   font-size:140%;
@@ -340,12 +340,12 @@ button:hover{
   color:#fff;
 }
 
-form{
+.custom-form form{
   background:#f0f0f0;
   padding:6% 4%;
 }
 
-input[type="email"],input[type="password"]{
+.custom-form input[type="email"],input[type="password"],input[type="number"]{
   width:92%;
   background:#fff;
   margin-bottom:4%;
@@ -356,7 +356,7 @@ input[type="email"],input[type="password"]{
   color:#555;
 }
 
-input[type="submit"]{
+.custom-form input[type="submit"]{
   width:100%;
   background:#3399cc;
   border:0;
@@ -369,6 +369,6 @@ input[type="submit"]{
   -webkit-transition:background .3s;
 }
 
-input[type="submit"]:hover{
+.custom-form input[type="submit"]:hover{
   background:#2288bb;
 }

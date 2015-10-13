@@ -7,7 +7,7 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
     var _register = function(registerEmail, registerPassword, registerRetypePassword){
         if (registerPassword !== registerRetypePassword) {
             $rootScope.successMsg = null;
-            $rootScope.errorMsg = {code: 'PASSWORDS_MISSMATCH'};
+            $rootScope.errorMsg = 'Passwords Missmatch!';
             return;
         }
         firebaseAuth.$createUser({
@@ -50,6 +50,7 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
         $rootScope.currentUser = null;
         $rootScope.errorMsg = null;
         $rootScope.successMsg = null;
+        $location.path('/');
     };
 
     return {

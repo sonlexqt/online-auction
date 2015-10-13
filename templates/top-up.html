@@ -1,0 +1,9 @@
+<div ng-controller="DepositController">
+    <div class="custom-form">
+        <h1>Top Up</h1>
+        <form ng-submit="updateDeposit()">
+            <input required type="number" min="0" placeholder="Top-up amount" ng-model="depositAmount">
+            <input type="submit" value="Top up" />
+        </form>
+    </div>
+</div>

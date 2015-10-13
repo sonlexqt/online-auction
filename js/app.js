@@ -18,8 +18,8 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/', {
 			templateUrl: 'templates/main.html'
 		})
-		.when('/register', {
-			templateUrl: 'templates/register.html'
+		.when('/sign-up', {
+			templateUrl: 'templates/sign-up.html'
 		})
 		.when('/sign-in', {
 			templateUrl: 'templates/sign-in.html'
@@ -30,8 +30,8 @@ dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, 
 		.when('/history', {
 			templateUrl: 'templates/history.html'
 		})
-		.when('/deposit', {
-			templateUrl: 'templates/deposit.html'
+		.when('/top-up', {
+			templateUrl: 'templates/top-up.html'
 		})
 		.otherwise({
 			redirectTo: '/'
