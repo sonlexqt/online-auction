@@ -46,10 +46,9 @@
                 <div ng-if="currentUser">
                     <p>Welcome, <b>{{currentUser.email}}</b>!</p>
                     Your Balance: <b>${{currentUser.balance}}<b>
-                    <ul>
-                        <li><a href="/deposit">Top-up</a></li>
-                        <li><a href="#" ng-click="doSignOut()">Sign Out</a></li>
-                    </ul>
+                    <a href="/my-items">Items</a>
+                    <a href="/deposit">Top-up</a>
+                    <a href="#" ng-click="doSignOut()">Sign Out</a>
                 </div>
             </div>
             <ul class="custom-nav">
@@ -61,12 +60,10 @@
     </section>
     <section class="body">
         <div class="body-inner">
-            <div ng-show="successMsg" class="col-md-8 col-md-offset-2 alert alert-success" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div ng-show="successMsg">
                 <strong>Success! </strong> {{successMsg}}
             </div>
-            <div ng-show="errorMsg" class="col-md-8 col-md-offset-2 alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div ng-show="errorMsg">
                 <strong>Error! </strong> {{errorMsg}}
             </div>
             <div class="ng-view">

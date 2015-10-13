@@ -1,10 +1,15 @@
 var servicesModule = angular.module('dkmhApp.Services', []);
 
 servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location', '$firebaseObject', function($firebaseAuth, $rootScope, $location, $firebaseObject){
-    var ref = new Firebase('https://dkmh-online-auction.firebaseio.com');
+    var ref = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
     var firebaseAuth = $firebaseAuth(ref);
 
-    var _register = function(registerEmail, registerPassword){
+    var _register = function(registerEmail, registerPassword, registerRetypePassword){
+        if (registerPassword !== registerRetypePassword) {
+            $rootScope.successMsg = null;
+            $rootScope.errorMsg = {code: 'PASSWORDS_MISSMATCH'};
+            return;
+        }
         firebaseAuth.$createUser({
             email: registerEmail,
             password: registerPassword
@@ -33,9 +38,7 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
             $rootScope.currentUser = $firebaseObject(ref.child('users').child(user.auth.uid));
             $rootScope.errorMsg = null;
             $rootScope.successMsg = null;
-            $rootScope.$apply(function() {
-                $location.path('/');
-            })
+            $location.path('/');
         }, function(error) {
             $rootScope.successMsg = null;
             $rootScope.errorMsg = error;

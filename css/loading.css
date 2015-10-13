@@ -1,7 +1,7 @@
 /*Loading icon*/
 .loading-container {
     text-align: center;
-    color: #4285f4;
+    color: #39C;
 }
 .cssload-loader {
     position: absolute;
@@ -36,7 +36,7 @@
     display: block;
     width: 8px;
     height: 28px;
-    background-color: rgba(66,133,244,0.96);
+    background-color: #39C;
     margin: 3px;
     position: absolute;
     border-radius: 50%;

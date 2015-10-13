@@ -10,7 +10,7 @@ controllersModule.controller('DKMHAppController', ['$scope', '$rootScope', 'Auth
 
 controllersModule.controller('RegisterController', ['$scope', 'AuthService', function($scope, AuthService) {
     $scope.doRegister = function() {
-        AuthService.register($scope.registerEmail, $scope.registerPassword);
+        AuthService.register($scope.registerEmail, $scope.registerPassword, $scope.registerRetypePassword);
     }
 }]);
 
@@ -21,7 +21,7 @@ controllersModule.controller('SignInController', ['$scope', 'AuthService', funct
 }]);
 
 controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
-    var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
+    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
     console.log('$scope.myItems');
@@ -59,10 +59,15 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
 }]);
 
 controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location) {
-    var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
+    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
 
+    $scope.loadingItems = true;
+
+    $scope.allItems.$loaded(function(data) {
+        $scope.loadingItems = false;
+    });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
             swal({
@@ -130,7 +135,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
 }]);
 
 controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope) {
-    var firebaseRef = new Firebase('https://dkmh-online-auction.firebaseio.com');
+    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.updateDeposit = function(depositAmount) {
         var newBalance = $rootScope.currentUser.balance + depositAmount;

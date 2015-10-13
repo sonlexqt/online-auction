@@ -1,17 +1,10 @@
-<div class="row" ng-controller="SignInController">
-    <div class="col-md-8 col-md-offset-2">
-        <h1>Sign In</h1>
-        <hr/>
-        <form>
-            <div class="form-group">
-                <label for="signin-username">Username</label>
-                <input required type="text" class="form-control" id="signin-username" placeholder="Username" ng-model="signInEmail">
-            </div>
-            <div class="form-group">
-                <label for="signin-password">Password</label>
-                <input required type="password" class="form-control" id="signin-password" placeholder="Password" ng-model="signInPassword">
-            </div>
-            <button type="submit" class="btn btn-default" ng-click="doSignIn()">Sign In</button>
+<div ng-controller="SignInController">
+    <div class="auth-form">
+        <h1>Sign in</h1>
+        <form ng-submit="doSignIn()">
+            <input type="email" placeholder="Email" ng-model="signInEmail" required/>
+            <input type="password" placeholder="Password" ng-model="signInPassword" required/>
+            <input type="submit" value="Sign in" />
         </form>
     </div>
 </div>
