@@ -53,8 +53,12 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             ownerEmail: $rootScope.currentUser.email,
             status: 'active'
         };
-        console.log('item',item);
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
+            $scope.itemName = '';
+            $scope.itemDescription = '';
+            $scope.itemImage = '';
+            $scope.itemStartingPrice = '';
+            $scope.itemExpiredDate = '';
             swal({
                 title: 'Success',
                 text: 'Your new item is ready for bidding!',
