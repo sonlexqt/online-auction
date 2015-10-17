@@ -86,7 +86,7 @@
 
                 li = $("li", ul);
                 itemLength = li.size();
-                calculatedTo = options.start;
+                calculatedTo = 0;
             }
 
             function initStyles() {
@@ -138,7 +138,7 @@
                 // Size of the entire UL. Including hidden and visible elements
                 // Will include LI's (width + padding + border + margin) * itemLength - Using outerwidth(true)
                 ul.css(sizeCss, ulSize+"px")
-                    .css(animCss, -(calculatedTo * liSize));
+                    .css(animCss, 0);
 
                 // Width of the DIV. Only the width of the visible elements
                 // Will include LI's (width + padding + border + margin) * numVisible - Using outerwidth(true)

@@ -83,8 +83,26 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
         $timeout(function(){
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 500
+                speed: 500,
+                circular: false,
             });
+            $(".info-button").on("click", function() {
+                // if ($(this).parent().parent().find(".flipper").css("display") == "none") {
+                //     $(this).parent().parent().find(".preview").css({"display": "inline-block"});
+                //     $(this).parent().parent().find(".card-panel").css({"display": "inline-block"});
+                //     // $(this).parent().parent().find(".description").css({"display": "none"});
+                // } else {
+                //     // $(this).parent().parent().find(".preview").css({"display": "none"});
+                //     // $(this).parent().parent().find(".card-panel").css({"display": "none"});
+                //     $(this).parent().parent().find(".description").css({"display": "block"});
+                // }
+                
+                // // alert($(this).parent().parent().attr('class'));
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+                    $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+                else
+                    $(this).parent().parent().find(".flipper").css({"transform": "none"});
+            })
         });
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
