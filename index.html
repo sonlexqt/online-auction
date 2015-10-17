@@ -23,6 +23,8 @@
     <script type="text/javascript" src="libs/angular-timer.min.js"></script>
     <script type="text/javascript" src="libs/angular_filepicker.min.js"></script>
     <script type="text/javascript" src="libs/sweetalert.min.js"></script>
+    <script type="text/javascript" src="libs/jquery.jcarousellite.js"></script>
+    <script type="text/javascript" src="libs/jquery.mousewheel.js"></script>
     <!-- Custom scripts -->
     <script type="text/javascript" src="js/dom.js"></script>
     <script type="text/javascript" src="js/filters.js"></script>
@@ -63,6 +65,20 @@
     <section class="body">
         <div class="body-inner">
             <div class="ng-view">
+            </div>
+            <div class="loading-container" ng-if="loadingMessage">
+                <div class="cssload-loader">
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                    <div class="cssload-side"></div>
+                </div>
+                <br>
+                <h3>{{loadingMessage}}</h3>
             </div>
         </div>
     </section>

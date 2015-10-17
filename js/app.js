@@ -9,6 +9,12 @@ var dkmhApp = angular.module('dkmhApp', [
 	'angular-filepicker'
 ]);
 
+dkmhApp.constant('CONSTANTS', (function() {
+	return {
+		FIREBASE_REF : 'https://ass1-ec-online-auction.firebaseio.com'
+	}
+})());
+
 dkmhApp.config(['$routeProvider', '$locationProvider', 'filepickerProvider', function($routeProvider, $locationProvider, filepickerProvider){
 	filepickerProvider.setKey('AuTMB8HLQteT89VQVQvguz');
 	

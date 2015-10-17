@@ -20,14 +20,14 @@ controllersModule.controller('SignInController', ['$scope', 'AuthService', funct
     }
 }]);
 
-controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
 }]);
 
-controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', function($scope, $rootScope, $firebaseArray, filepickerService) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, filepickerService, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
     $scope.pickImage = function() {
         filepickerService.pick({
                 mimetype: 'image/*',
@@ -56,12 +56,14 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             ownerEmail: $rootScope.currentUser.email,
             status: 'active'
         };
+        $rootScope.loadingMessage = 'Adding new item';
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
             $scope.itemImage = '';
             $scope.itemStartingPrice = '';
             $scope.itemExpiredDate = '';
+            $rootScope.loadingMessage = null;
             swal({
                 title: 'Success',
                 text: 'Your new item is ready for bidding!',
@@ -71,15 +73,22 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS',function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
 
-    $scope.loadingItems = true;
+    $rootScope.loadingMessage = 'Loading item list';
 
     $scope.allItems.$loaded(function(data) {
-        $scope.loadingItems = false;
+        $rootScope.loadingMessage = null;
+        $timeout(function() {
+            // TODO need to detect precisely when the DOM is fully rendered
+            $(".scroll-wheel").jCarouselLite({
+                mouseWheel: true,
+                speed: 500
+            });
+        });
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
@@ -145,33 +154,32 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
         });
     };
 
-    $scope.$on('timer-stopped', function (event, data){
-        // TODO XIN
-        console.log('Timer Stopped - event = ', event);
-        console.log('Timer Stopped - data = ', data);
-    });
+    $scope.moveToExpired = function(itemId){
+        console.log(itemId + ' is expired !');
+    }
 }]);
 
-controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('DepositController', ['$scope', '$rootScope', 'CONSTANTS',function($scope, $rootScope, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.updateDeposit = function() {
         var newBalance = $rootScope.currentUser.balance + $scope.depositAmount;
+        $rootScope.loadingMessage = 'Topping-up your balance';
         firebaseRef.child('users').child($rootScope.currentUser.uid).update({
             balance: newBalance
         }, function(err) {
             if (err) {
-                // Display deposit error
+                $rootScope.loadingMessage = null;
                 swal({
-                    title: 'Deposit Error',
-                    text: err,
+                    title: 'Error',
+                    text: JSON.stringify(error),
                     type: 'error'
                 });
             } else {
-                // Display deposit success notification
+                $rootScope.loadingMessage = null;
                 swal({
                     title: 'Success',
-                    text: 'Deposit successfully !',
+                    text: 'Topped-up your balance!',
                     type: 'success'
                 });
                 $scope.depositAmount = '';
