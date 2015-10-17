@@ -2,14 +2,12 @@
 .loading-container {
     text-align: center;
     color: #39C;
+    padding: 10px;
 }
 .cssload-loader {
-    position: absolute;
-    left: 50%;
     width: 66.284271247462px;
     height: 66.284271247462px;
-    margin-left: -33.142135623731px;
-    margin-top: -33.142135623731px;
+    margin: 10px auto;
     border-radius: 100%;
     animation-name: cssload-loader;
         -o-animation-name: cssload-loader;

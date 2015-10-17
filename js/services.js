@@ -6,24 +6,40 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
 
     var _register = function(registerEmail, registerPassword, registerRetypePassword){
         if (registerPassword !== registerRetypePassword) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = 'Passwords Missmatch!';
+            swal({
+                title: 'Error',
+                text: 'Passwords Missmatch!',
+                type: 'error'
+            });
+            console.log('a');
             return;
         }
+        $rootScope.loadingMessage = 'Creating new user';
         firebaseAuth.$createUser({
             email: registerEmail,
             password: registerPassword
         }).then(function(userData) {
-            $rootScope.successMsg = 'Done creating new user !';
-            $rootScope.errorMsg = null;
-            _signIn(registerEmail, registerPassword, true);
+            $rootScope.loadingMessage = null;
+            swal({
+                title: 'Success',
+                text: 'Created new user!',
+                type: 'success'
+            }, function() {
+                _signIn(registerEmail, registerPassword, true);
+            });
         }).catch(function(error) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = error;
+            $rootScope.loadingMessage = null;
+            swal({
+                title: 'Error',
+                text: JSON.stringify(error),
+                type: 'error'
+            });
         });
     };
 
     var _signIn = function(registerEmail, registerPassword, isNewlyCreatedUser){
+        $rootScope.loadingMessage = 'Signing In';
+        console.log('Signing In');
         firebaseAuth.$authWithPassword({
             email: registerEmail,
             password: registerPassword
@@ -36,20 +52,21 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
                 });
             }
             $rootScope.currentUser = $firebaseObject(ref.child('users').child(user.auth.uid));
-            $rootScope.errorMsg = null;
-            $rootScope.successMsg = null;
+            $rootScope.loadingMessage = null;
             $location.path('/');
         }, function(error) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = error;
+            $rootScope.loadingMessage = null;
+            swal({
+                title: 'Error',
+                text: JSON.stringify(error),
+                type: 'error'
+            });
         });
     };
 
     var _signOut = function(){
         firebaseAuth.$unauth();
         $rootScope.currentUser = null;
-        $rootScope.errorMsg = null;
-        $rootScope.successMsg = null;
         $location.path('/');
     };
 

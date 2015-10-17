@@ -1,21 +1,5 @@
 <div ng-controller="MainController" class="scroll-wheel">
-    <div class="loading-container" ng-if="loadingItems">
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="cssload-loader">
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-            <div class="cssload-side"></div>
-        </div>
-    </div>
-    <ul class="card-list" ng-if="!loadingItems">
+    <ul class="card-list" ng-if="!loadingMessage">
         <div ng-if="allItems.length == 0">
         <h3>No active bids...</h3>
         Please come again later, or add your own items for bidding :)
