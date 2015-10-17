@@ -60,9 +60,9 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
-            $scope.itemImage = '';
             $scope.itemStartingPrice = '';
             $scope.itemExpiredDate = '';
+            $scope.itemImage = '';
             $rootScope.loadingMessage = null;
             swal({
                 title: 'Success',
