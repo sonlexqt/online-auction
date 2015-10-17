@@ -112,6 +112,10 @@ ul.card-list li {
     vertical-align: top;
 }
 
+.scroll-wheel {
+  margin: 0 auto;
+}
+
 .card-container {
     position: relative;
 }

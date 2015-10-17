@@ -83,9 +83,9 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
         $timeout(function(){
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 1000
+                speed: 500
             });
-        }, 5000)
+        }, 100)
         
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
