@@ -65,7 +65,7 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             swal({
                 title: 'Success',
                 text: 'Your new item is ready for bidding!',
-                type: 'success',
+                type: 'success'
             });
         });
     };
@@ -124,7 +124,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 // confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, Place my Bid!",
                 closeOnConfirm: false,
-                html: true,
+                html: true
             }, function() {
                 $scope.submitBid();
                 swal({
@@ -143,8 +143,12 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
-        // $scope.$apply();
     };
+
+    $scope.$on('timer-stopped', function (event, data){
+        console.log('Timer Stopped - event = ', event);
+        console.log('Timer Stopped - data = ', data);
+    });
 }]);
 
 controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope) {
@@ -156,9 +160,17 @@ controllersModule.controller('DepositController', ['$scope', '$rootScope', funct
             balance: newBalance
         }, function(err) {
             if (err) {
-                $rootScope.errorMsg = err;
+                swal({
+                    title: 'Deposit Error',
+                    text: err,
+                    type: 'error'
+                });
             } else {
-                $rootScope.successMsg = 'Deposit successfully !';
+                swal({
+                    title: 'Success',
+                    text: 'Top Up successfully !',
+                    type: 'success'
+                });
                 $scope.depositAmount = '';
             }
         });

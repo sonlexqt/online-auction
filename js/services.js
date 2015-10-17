@@ -6,20 +6,29 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
 
     var _register = function(registerEmail, registerPassword, registerRetypePassword){
         if (registerPassword !== registerRetypePassword) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = 'Passwords Missmatch!';
+            swal({
+                title: 'Invalid Value',
+                text: 'Password Missmatch !',
+                type: 'error'
+            });
             return;
         }
         firebaseAuth.$createUser({
             email: registerEmail,
             password: registerPassword
         }).then(function(userData) {
-            $rootScope.successMsg = 'Done creating new user !';
-            $rootScope.errorMsg = null;
+            swal({
+                title: 'Success',
+                text: 'Done creating new user!',
+                type: 'success'
+            });
             _signIn(registerEmail, registerPassword, true);
         }).catch(function(error) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = error;
+            swal({
+                title: 'Register Error',
+                text: error,
+                type: 'error'
+            });
         });
     };
 
@@ -36,20 +45,19 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
                 });
             }
             $rootScope.currentUser = $firebaseObject(ref.child('users').child(user.auth.uid));
-            $rootScope.errorMsg = null;
-            $rootScope.successMsg = null;
             $location.path('/');
         }, function(error) {
-            $rootScope.successMsg = null;
-            $rootScope.errorMsg = error;
+            swal({
+                title: 'Sign In Error',
+                text: error,
+                type: 'error'
+            });
         });
     };
 
     var _signOut = function(){
         firebaseAuth.$unauth();
         $rootScope.currentUser = null;
-        $rootScope.errorMsg = null;
-        $rootScope.successMsg = null;
         $location.path('/');
     };
 
