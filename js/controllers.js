@@ -26,17 +26,20 @@ controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$fir
     $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
 }]);
 
-controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
+controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', function($scope, $rootScope, $firebaseArray, filepickerService) {
     var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
-
-    angular.element('#item-image').change(function(e) {
-        var imageFile = this.files[0];
-        var fileReader = new FileReader();
-        fileReader.readAsDataURL(imageFile);
-        fileReader.onloadend = function() {
-            $scope.itemImage = fileReader.result;
-        }
-    });
+    $scope.pickImage = function() {
+        filepickerService.pick({
+                mimetype: 'image/*',
+                services: ['COMPUTER']
+            },
+            function(result) {
+                $scope.itemImage = result.url;
+                console.log($scope.itemImage);
+                $scope.$apply();
+            }
+        );
+    };
 
     $scope.addNewItem = function() {
         var expiredDate = new Date($scope.itemExpiredDate).getTime();
@@ -140,7 +143,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
-        $scope.$apply();
+        // $scope.$apply();
     };
 }]);
 

@@ -3,10 +3,15 @@
         <h1>Add new Item for Bidding</h1>
         <form ng-submit="addNewItem()">
             <input required type="text" ng-model="itemName" placeholder="Item name">
-            <input required type="file" id="item-image" accept="image/*" placeholder="Item image">
             <textarea required rows="3" ng-model="itemDescription" placeholder="Item description"></textarea>
             <input required type="datetime-local" ng-model="itemExpiredDate" placeholder="Expiry date">
             <input required type="number" ng-model="itemStartingPrice" placeholder="Starting price ($)">
+            <div class="image-picker">
+                <button type="button" ng-click="pickImage()">Browse & upload Item thumbnail</button>
+                <br>
+                <img ng-src="{{itemImage}}" width="50%"/>
+            </div>
+            <br>
             <input type="submit" value="Add new Item" />
         </form>
     </div>

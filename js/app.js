@@ -5,10 +5,13 @@ var dkmhApp = angular.module('dkmhApp', [
 	'dkmhApp.Filters',
 	'dkmhApp.Controllers',
 	'dkmhApp.Directives',
-	'timer'
+	'timer',
+	'angular-filepicker'
 ]);
 
-dkmhApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
+dkmhApp.config(['$routeProvider', '$locationProvider', 'filepickerProvider', function($routeProvider, $locationProvider, filepickerProvider){
+	filepickerProvider.setKey('AuTMB8HLQteT89VQVQvguz');
+	
 	$locationProvider.html5Mode({
 		enabled: true,
 		requireBase: false
