@@ -85,8 +85,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 mouseWheel: true,
                 speed: 500
             });
-        }, 100)
-        
+        });
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
