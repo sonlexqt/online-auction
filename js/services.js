@@ -7,7 +7,7 @@ servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location
     var _register = function(registerEmail, registerPassword, registerRetypePassword){
         if (registerPassword !== registerRetypePassword) {
             swal({
-                title: 'Invalid Value',
+                title: 'Error',
                 text: 'Password Missmatch !',
                 type: 'error'
             });

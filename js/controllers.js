@@ -146,6 +146,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     };
 
     $scope.$on('timer-stopped', function (event, data){
+        // TODO XIN
         console.log('Timer Stopped - event = ', event);
         console.log('Timer Stopped - data = ', data);
     });
@@ -160,15 +161,17 @@ controllersModule.controller('DepositController', ['$scope', '$rootScope', funct
             balance: newBalance
         }, function(err) {
             if (err) {
+                // Display deposit error
                 swal({
                     title: 'Deposit Error',
                     text: err,
                     type: 'error'
                 });
             } else {
+                // Display deposit success notification
                 swal({
                     title: 'Success',
-                    text: 'Top Up successfully !',
+                    text: 'Deposit successfully !',
                     type: 'success'
                 });
                 $scope.depositAmount = '';
