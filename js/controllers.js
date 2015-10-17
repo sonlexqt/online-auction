@@ -56,12 +56,14 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             ownerEmail: $rootScope.currentUser.email,
             status: 'active'
         };
+        $rootScope.loadingMessage = 'Adding new item'
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
-            $scope.itemImage = '';
             $scope.itemStartingPrice = '';
             $scope.itemExpiredDate = '';
+            $scope.itemImage = '';
+            $rootScope.loadingMessage = null;
             swal({
                 title: 'Success',
                 text: 'Your new item is ready for bidding!',
@@ -71,16 +73,16 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', function($scope, $rootScope, $firebaseArray, $location,  $timeout) {
+controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', function($scope, $rootScope, $firebaseArray, $location, $timeout) {
     var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
 
-    $scope.loadingItems = true;
+    $rootScope.loadingMessage = 'Loading item list';
 
     $scope.allItems.$loaded(function(data) {
-        $scope.loadingItems = false;
-        $timeout(function(){
+        $rootScope.loadingMessage = null;
+        $timeout(function() {
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
                 speed: 500,
@@ -176,13 +178,24 @@ controllersModule.controller('DepositController', ['$scope', '$rootScope', funct
 
     $scope.updateDeposit = function() {
         var newBalance = $rootScope.currentUser.balance + $scope.depositAmount;
+        $rootScope.loadingMessage = 'Topping-up your balance';
         firebaseRef.child('users').child($rootScope.currentUser.uid).update({
             balance: newBalance
         }, function(err) {
             if (err) {
-                $rootScope.errorMsg = err;
+                $rootScope.loadingMessage = null;
+                swal({
+                    title: 'Error',
+                    text: JSON.stringify(error),
+                    type: 'error'
+                });
             } else {
-                $rootScope.successMsg = 'Deposit successfully !';
+                $rootScope.loadingMessage = null;
+                swal({
+                    title: 'Success',
+                    text: 'Topped-up your balance!',
+                    type: 'success'
+                });
                 $scope.depositAmount = '';
             }
         });

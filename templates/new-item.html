@@ -9,7 +9,7 @@
             <div class="image-picker">
                 <button type="button" ng-click="pickImage()">Browse & upload Item thumbnail</button>
                 <br>
-                <img ng-src="{{itemImage}}" width="50%"/>
+                <img ng-if="itemImage" ng-src="{{itemImage}}" width="50%"/>
             </div>
             <br>
             <input type="submit" value="Add new Item" />
