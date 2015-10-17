@@ -71,7 +71,7 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', function($scope, $rootScope, $firebaseArray, $location) {
+controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', function($scope, $rootScope, $firebaseArray, $location,  $timeout) {
     var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
@@ -80,6 +80,13 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
 
     $scope.allItems.$loaded(function(data) {
         $scope.loadingItems = false;
+        $timeout(function(){
+            $(".scroll-wheel").jCarouselLite({
+                mouseWheel: true,
+                speed: 1000
+            });
+        }, 5000)
+        
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
