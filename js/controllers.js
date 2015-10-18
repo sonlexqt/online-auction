@@ -112,6 +112,19 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
 
     $scope.allActiveItems.$loaded(function (data) {
         $rootScope.loadingMessage = null;
+
+        // When a user login, do a check to all of the currently active items to get the expired ones
+        var itemsIdToBeExpired = [];
+        for (var i = 0; i < $scope.allActiveItems.length; i++){
+            if ($scope.allActiveItems[i].expiredDate < Date.now()){
+                itemsIdToBeExpired.push($scope.allActiveItems[i].$id);
+            }
+        }
+        // ... and move them to the 'expired_items' collection
+        for (var i = 0; i < itemsIdToBeExpired.length; i++){
+            $scope.moveToExpired(itemsIdToBeExpired[i]);
+        }
+
         $timeout(function () {
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
@@ -214,7 +227,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
     };
 
     $scope.moveToExpired = function (itemId) {
-        // TODO need a better way to retrieve the about-to-expired item
+        // TODO need a better way to retrieve the itemToBeExpired
         var itemToBeExpired = null;
         for (var i = 0; i < $scope.allActiveItems.length; i++) {
             if ($scope.allActiveItems[i].$id == itemId) {
@@ -222,8 +235,28 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                 break;
             }
         }
-        if (itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing && !itemToBeExpired.isFinished) {
-            // TODO XIN
+        // Case I: No one bid for this item
+        if (!itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing){
+            firebaseRef.child('active-items').child(itemId).update({
+                isProcessing: true
+            }, function (err) {
+                firebaseRef.child('active-items').child(itemId).remove(function (err) {
+                    if (err) console.error(err);
+                    // Remove some firebase's keys
+                    var newExpiredItem = itemToBeExpired;
+                    delete newExpiredItem["__proto__"];
+                    delete newExpiredItem["$id"];
+                    delete newExpiredItem["$$hashKey"];
+                    delete newExpiredItem["$priority"];
+                    // Push the toBeExpired item to the 'expired-items' collection
+                    firebaseRef.child('expired-items').push(newExpiredItem, function (err) {
+                        if (err) console.log(error);
+                    });
+                });
+            });
+        }
+        // Case 2: Someone bid for this item
+        if (itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing) {
             console.log('Current item price: ' + itemToBeExpired.currentPrice);
             var currentBuyerId = itemToBeExpired.currentBuyerId;
             var ownerId = itemToBeExpired.ownerId;
@@ -232,15 +265,13 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                 isProcessing: true
             }, function (err) {
                 if (err) console.error(err);
-                // TODO XIN handle the case when no one bid for the product
                 var buyerObject = $firebaseObject(firebaseRef.child('users').child(currentBuyerId));
                 buyerObject.$loaded(function (data) {
                     if (buyerObject.balance > itemToBeExpired.currentPrice) {
                         var ownerObject = $firebaseObject(firebaseRef.child('users').child(ownerId));
                         ownerObject.$loaded(function (data) {
                             var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
-                            // TODO XIN
-                            console.log('oldOwnerBalance: ' + ownerObject.balance);
+                            console.log('oldOwner(' + itemToBeExpired.ownerEmail + ') balance: ' + ownerObject.balance);
                             console.log('newOwnerBalance: ' + newOwnerBalance);
                             firebaseRef.child('users').child(ownerId).update({
                                 balance: newOwnerBalance
@@ -248,8 +279,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                                 if (err) console.error(err);
                                 else {
                                     var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
-                                    // TODO XIN
-                                    console.log('oldBuyerBalance: ' + buyerObject.balance);
+                                    console.log('oldBuyer(' + itemToBeExpired.currentBuyerEmail + ') balance: ' + buyerObject.balance);
                                     console.log('newBuyerBalance: ' + newBuyerBalance);
                                     firebaseRef.child('users').child(currentBuyerId).update({
                                         balance: newBuyerBalance
@@ -268,7 +298,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                                             firebaseRef.child('expired-items').push(newExpiredItem, function (err) {
                                                 if (err) console.log(error);
                                             });
-                                        })
+                                        });
                                     });
                                 }
                             });
