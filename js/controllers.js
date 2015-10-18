@@ -100,24 +100,29 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             })
         });
     });
-    $scope.allItems.$watch(function() {
+    $scope.allItems.$watch(function(event) {
+        console.log(event.event)
         // $scope.$apply();
-        $timeout(function() {
-            $(".scroll-wheel").jCarouselLite({
-                mouseWheel: true,
-                speed: 500,
-                circular: false,
-            });
-            $(".info-button").on("click", function() {
-                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
-                    $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
-                else
-                    $(this).parent().parent().find(".flipper").css({"transform": "none"});
-            });
-            $(".card").mouseout(function() {
-                $(this).find('.flipper').css({"transform": "none"});
-            })
-        });
+        // if (event.event != "child_added") {
+            // $timeout(function() {
+            //     $(".scroll-wheel").jCarouselLite({
+            //         mouseWheel: true,
+            //         speed: 500,
+            //         circular: false,
+            //     });
+            //     $(".info-button").on("click", function() {
+            //         debugger;
+            //         if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+            //             $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+            //         else
+            //             $(this).parent().parent().find(".flipper").css({"transform": "none"});
+            //     });
+            //     $(".card").mouseout(function() {
+            //         $(this).find('.flipper').css({"transform": "none"});
+            //     })
+            // }, 5000);
+        // }
+        
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
