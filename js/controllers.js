@@ -167,12 +167,16 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                     $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
                     $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
                 }
-                else
+                else{
                     $(this).parent().parent().find(".flipper").css({"transform": "none"});
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "none"});
+                }
+
             });
-            $(".card").mouseout(function () {
-                $(this).find('.flipper').css({"transform": "none"});
-            })
+            //$(".card").mouseout(function () {
+            //    $(this).find('.flipper').css({"transform": "none"});
+            //    $(this).find(".bid-btn").css({"transform": "none"});
+            //})
         });
 // >>>>>>> 3893ff74152c17c401eeefd19f8b9d5aa8832d8e
     });
