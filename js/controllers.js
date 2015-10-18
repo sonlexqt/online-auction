@@ -91,16 +91,46 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
                 circular: false
             });
             $(".info-button").on("click", function() {
-                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none"){
                     $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
-                else
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
+                }
+                else{
                     $(this).parent().parent().find(".flipper").css({"transform": "none"});
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "none"});
+                }
             });
             $(".card").mouseout(function() {
                 $(this).find('.flipper').css({"transform": "none"});
+                $(this).find('.bid-btn').css({"transform": "none"});
             })
         });
     });
+// <<<<<<< HEAD
+//     $scope.allItems.$watch(function(event) {
+//         console.log(event.event)
+//         // $scope.$apply();
+//         // if (event.event != "child_added") {
+//             // $timeout(function() {
+//             //     $(".scroll-wheel").jCarouselLite({
+//             //         mouseWheel: true,
+//             //         speed: 500,
+//             //         circular: false,
+//             //     });
+//             //     $(".info-button").on("click", function() {
+//             //         debugger;
+//             //         if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+//             //             $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+//             //         else
+//             //             $(this).parent().parent().find(".flipper").css({"transform": "none"});
+//             //     });
+//             //     $(".card").mouseout(function() {
+//             //         $(this).find('.flipper').css({"transform": "none"});
+//             //     })
+//             // }, 5000);
+//         // }
+        
+// =======
 }]);
 
 controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS', '$firebaseObject', function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS, $firebaseObject) {
@@ -133,8 +163,10 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                 circular: false
             });
             $(".info-button").on("click", function () {
-                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none"){
                     $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
+                }
                 else
                     $(this).parent().parent().find(".flipper").css({"transform": "none"});
             });
@@ -142,6 +174,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                 $(this).find('.flipper').css({"transform": "none"});
             })
         });
+// >>>>>>> 3893ff74152c17c401eeefd19f8b9d5aa8832d8e
     });
     //$scope.allActiveItems.$watch(function() {
     //    // $scope.$apply();
