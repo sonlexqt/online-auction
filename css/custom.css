@@ -185,11 +185,12 @@ a.button {
     top: 0px;
     text-align: left;
     padding: 5px 15px;
-    font-size: 13.68px;
-    color: #807b7b;
+    font-size: 16px;
     font-family: 'MyriadPro';
     height: 270px;
     border: 10px solid #db4337;
+    background-color: #db4337;
+    color: white;
     overflow-y: auto;
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);

@@ -93,6 +93,9 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                     $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
                 else
                     $(this).parent().parent().find(".flipper").css({"transform": "none"});
+            });
+            $(".card").mouseout(function() {
+                $(this).find('.flipper').css({"transform": "none"});
             })
         });
     });
