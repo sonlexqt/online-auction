@@ -1,10 +1,10 @@
-<div ng-controller="MainController" class="scroll-wheel">
+<div ng-controller="ActiveBidsController" class="scroll-wheel">
     <ul class="card-list" ng-if="!loadingMessage">
-        <div ng-if="allItems.length == 0">
+        <div ng-if="allActiveItems.length == 0">
         <h3>No active bids...</h3>
         Please come again later, or add your own items for bidding :)
         </div>
-        <li ng-repeat="item in allItems" data-itemid="{{item.$id}}">
+        <li ng-repeat="item in allActiveItems" data-itemid="{{item.$id}}">
             <div class="card-container">
                 <img src="images/price-marker.png" class="price-maker-bottom">
                 <div class="card">

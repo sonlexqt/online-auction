@@ -25,7 +25,10 @@ dkmhApp.config(['$routeProvider', '$locationProvider', 'filepickerProvider', fun
 
 	$routeProvider
 		.when('/', {
-			templateUrl: 'templates/main.html'
+			templateUrl: 'templates/active-bids.html'
+		})
+		.when('/expired-bids', {
+			templateUrl: 'templates/expired-bids.html'
 		})
 		.when('/sign-up', {
 			templateUrl: 'templates/sign-up.html'

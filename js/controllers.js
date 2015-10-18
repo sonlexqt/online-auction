@@ -23,7 +23,9 @@ controllersModule.controller('SignInController', ['$scope', 'AuthService', funct
 controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, CONSTANTS) {
     var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
-    $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
+    $scope.myActiveItems = $firebaseArray(firebaseRef.child('active-items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
+
+    $scope.myExpiredItems = $firebaseArray(firebaseRef.child('expired-items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
 }]);
 
 controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, filepickerService, CONSTANTS) {
@@ -53,11 +55,10 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             startingPrice: $scope.itemStartingPrice,
             currentPrice: $scope.itemStartingPrice,
             ownerId: $rootScope.currentUser.uid,
-            ownerEmail: $rootScope.currentUser.email,
-            status: 'active'
+            ownerEmail: $rootScope.currentUser.email
         };
         $rootScope.loadingMessage = 'Adding new item';
-        $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
+        $firebaseArray(firebaseRef.child('active-items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
             $scope.itemStartingPrice = '';
@@ -73,65 +74,122 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS', '$firebaseObject', function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS, $firebaseObject) {
+controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '$firebaseArray', 'CONSTANTS', '$timeout',function($scope, $rootScope, $firebaseArray, CONSTANTS, $timeout){
     var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
-    $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
+    $scope.allExpiredItems = $firebaseArray(firebaseRef.child('expired-items').orderByChild("expiredDate"));
 
     $rootScope.loadingMessage = 'Loading item list';
 
-    $scope.allItems.$loaded(function(data) {
+    $scope.allExpiredItems.$loaded(function(data) {
         $rootScope.loadingMessage = null;
         $timeout(function() {
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
                 speed: 500,
-                circular: false,
+                circular: false
             });
             $(".info-button").on("click", function() {
-                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none"){
                     $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
-                else
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
+                }
+                else{
                     $(this).parent().parent().find(".flipper").css({"transform": "none"});
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "none"});
+                }
             });
             $(".card").mouseout(function() {
                 $(this).find('.flipper').css({"transform": "none"});
+                $(this).find('.bid-btn').css({"transform": "none"});
             })
         });
     });
-    $scope.allItems.$watch(function(event) {
-        console.log(event.event)
-        // $scope.$apply();
-        // if (event.event != "child_added") {
-            // $timeout(function() {
-            //     $(".scroll-wheel").jCarouselLite({
-            //         mouseWheel: true,
-            //         speed: 500,
-            //         circular: false,
-            //     });
-            //     $(".info-button").on("click", function() {
-            //         debugger;
-            //         if ($(this).parent().parent().find(".flipper").css("transform") == "none")
-            //             $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
-            //         else
-            //             $(this).parent().parent().find(".flipper").css({"transform": "none"});
-            //     });
-            //     $(".card").mouseout(function() {
-            //         $(this).find('.flipper').css({"transform": "none"});
-            //     })
-            // }, 5000);
-        // }
+// <<<<<<< HEAD
+//     $scope.allItems.$watch(function(event) {
+//         console.log(event.event)
+//         // $scope.$apply();
+//         // if (event.event != "child_added") {
+//             // $timeout(function() {
+//             //     $(".scroll-wheel").jCarouselLite({
+//             //         mouseWheel: true,
+//             //         speed: 500,
+//             //         circular: false,
+//             //     });
+//             //     $(".info-button").on("click", function() {
+//             //         debugger;
+//             //         if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+//             //             $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+//             //         else
+//             //             $(this).parent().parent().find(".flipper").css({"transform": "none"});
+//             //     });
+//             //     $(".card").mouseout(function() {
+//             //         $(this).find('.flipper').css({"transform": "none"});
+//             //     })
+//             // }, 5000);
+//         // }
         
+// =======
+}]);
+
+controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS', '$firebaseObject', function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS, $firebaseObject) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
+
+    $scope.allActiveItems = $firebaseArray(firebaseRef.child('active-items').orderByChild("expiredDate"));
+
+    $rootScope.loadingMessage = 'Loading item list';
+
+    $scope.allActiveItems.$loaded(function (data) {
+        $rootScope.loadingMessage = null;
+        $timeout(function () {
+            // TODO need to detect precisely when the DOM is fully rendered
+            $(".scroll-wheel").jCarouselLite({
+                mouseWheel: true,
+                speed: 500,
+                circular: false
+            });
+            $(".info-button").on("click", function () {
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none"){
+                    $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+                    $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
+                }
+                else
+                    $(this).parent().parent().find(".flipper").css({"transform": "none"});
+            });
+            $(".card").mouseout(function () {
+                $(this).find('.flipper').css({"transform": "none"});
+            })
+        });
+// >>>>>>> 3893ff74152c17c401eeefd19f8b9d5aa8832d8e
     });
-    $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
+    //$scope.allActiveItems.$watch(function() {
+    //    // $scope.$apply();
+    //    $timeout(function() {
+    //        $(".scroll-wheel").jCarouselLite({
+    //            mouseWheel: true,
+    //            speed: 500,
+    //            circular: false
+    //        });
+    //        $(".info-button").on("click", function() {
+    //            if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+    //                $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+    //            else
+    //                $(this).parent().parent().find(".flipper").css({"transform": "none"});
+    //        });
+    //        $(".card").mouseout(function() {
+    //            $(this).find('.flipper').css({"transform": "none"});
+    //        })
+    //    });
+    //});
+    $scope.setCurrentItem = function (itemId, itemName, itemNewPrice, itemCurrentPrice) {
         if (!$rootScope.currentUser) {
             swal({
                 title: 'Not signed-in',
                 text: 'Please sign in before bidding for items !',
                 type: 'error'
-            }, function() {
-                $rootScope.$apply(function() {
+            }, function () {
+                $rootScope.$apply(function () {
                     $location.path('/sign-in');
                 });
             });
@@ -168,7 +226,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 confirmButtonText: "Yes, Place my Bid!",
                 closeOnConfirm: false,
                 html: true
-            }, function() {
+            }, function () {
                 $scope.submitBid();
                 swal({
                     title: 'Success',
@@ -180,78 +238,81 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
 
     };
 
-    $scope.submitBid = function() {
-        firebaseRef.child('items').child($scope.currentItem.id).update({
+    $scope.submitBid = function () {
+        firebaseRef.child('active-items').child($scope.currentItem.id).update({
             currentPrice: $scope.currentItem.value,
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
     };
 
-    $scope.moveToExpired = function(itemId){
+    $scope.moveToExpired = function (itemId) {
         // TODO need a better way to retrieve the about-to-expired item
         var itemToBeExpired = null;
-        for (var i = 0; i<$scope.allItems.length; i++){
-            if ($scope.allItems[i].$id == itemId){
-                itemToBeExpired = $scope.allItems[i];
+        for (var i = 0; i < $scope.allActiveItems.length; i++) {
+            if ($scope.allActiveItems[i].$id == itemId) {
+                itemToBeExpired = $scope.allActiveItems[i];
                 break;
             }
         }
-        if (itemToBeExpired.status == 'active' && itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing && !itemToBeExpired.isFinished){
+        if (itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing && !itemToBeExpired.isFinished) {
             // TODO XIN
             console.log('Current item price: ' + itemToBeExpired.currentPrice);
             var currentBuyerId = itemToBeExpired.currentBuyerId;
             var ownerId = itemToBeExpired.ownerId;
             // Check if currentBuyerId's balance is more than current item price
-            firebaseRef.child('items').child(itemId).update({
+            firebaseRef.child('active-items').child(itemId).update({
                 isProcessing: true
-            }, function(err){
+            }, function (err) {
                 if (err) console.error(err);
+                // TODO XIN handle the case when no one bid for the product
                 var buyerObject = $firebaseObject(firebaseRef.child('users').child(currentBuyerId));
-                buyerObject.$loaded(function(data){
-                    if (buyerObject.balance > itemToBeExpired.currentPrice){
-                        // Update item status to 'expired'
-                        firebaseRef.child('items').child(itemId).update({
-                            status: 'expired'
-                        }, function(err){
-                            if (err) console.error(err);
-                            else {
-                                var ownerObject= $firebaseObject(firebaseRef.child('users').child(ownerId));
-                                ownerObject.$loaded(function(data){
-                                    var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
+                buyerObject.$loaded(function (data) {
+                    if (buyerObject.balance > itemToBeExpired.currentPrice) {
+                        var ownerObject = $firebaseObject(firebaseRef.child('users').child(ownerId));
+                        ownerObject.$loaded(function (data) {
+                            var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
+                            // TODO XIN
+                            console.log('oldOwnerBalance: ' + ownerObject.balance);
+                            console.log('newOwnerBalance: ' + newOwnerBalance);
+                            firebaseRef.child('users').child(ownerId).update({
+                                balance: newOwnerBalance
+                            }, function (err) {
+                                if (err) console.error(err);
+                                else {
+                                    var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
                                     // TODO XIN
-                                    console.log('oldOwnerBalance: ' + ownerObject.balance);
-                                    console.log('newOwnerBalance: ' + newOwnerBalance);
-                                    firebaseRef.child('users').child(ownerId).update({
-                                        balance: newOwnerBalance
-                                    }, function (err){
+                                    console.log('oldBuyerBalance: ' + buyerObject.balance);
+                                    console.log('newBuyerBalance: ' + newBuyerBalance);
+                                    firebaseRef.child('users').child(currentBuyerId).update({
+                                        balance: newBuyerBalance
+                                    }, function (err) {
                                         if (err) console.error(err);
-                                        else {
-                                            var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
-                                            // TODO XIN
-                                            console.log('oldBuyerBalance: ' + buyerObject.balance);
-                                            console.log('newBuyerBalance: ' + newBuyerBalance);
-                                            firebaseRef.child('users').child(currentBuyerId).update({
-                                                balance: newBuyerBalance
-                                            }, function(err){
-                                                if (err) console.error(err);
-                                                firebaseRef.child('items').child(itemId).update({
-                                                    isProcessing: false,
-                                                    isFinished: true
-                                                });
+                                        // Remove the toBeExpired item from the 'active-items' collection
+                                        firebaseRef.child('active-items').child(itemId).remove(function (err) {
+                                            if (err) console.error(err);
+                                            // Remove some firebase's keys
+                                            var newExpiredItem = itemToBeExpired;
+                                            delete newExpiredItem["__proto__"];
+                                            delete newExpiredItem["$id"];
+                                            delete newExpiredItem["$$hashKey"];
+                                            delete newExpiredItem["$priority"];
+                                            // Push the toBeExpired item to the 'expired-items' collection
+                                            firebaseRef.child('expired-items').push(newExpiredItem, function (err) {
+                                                if (err) console.log(error);
                                             });
-                                        }
+                                        })
                                     });
-                                });
-                            }
-                        });
+                                }
+                            });
+                        })
                     } else {
                         // TODO handle this case: the buyer doesn't have enough funds
                     }
                 });
             });
         }
-    }
+    };
 }]);
 
 controllersModule.controller('DepositController', ['$scope', '$rootScope', 'CONSTANTS',function($scope, $rootScope, CONSTANTS) {
