@@ -60,9 +60,9 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
-            $scope.itemImage = '';
             $scope.itemStartingPrice = '';
             $scope.itemExpiredDate = '';
+            $scope.itemImage = '';
             $rootScope.loadingMessage = null;
             swal({
                 title: 'Success',
@@ -86,8 +86,18 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 500
+                speed: 500,
+                circular: false,
             });
+            $(".info-button").on("click", function() {
+                if ($(this).parent().parent().find(".flipper").css("transform") == "none")
+                    $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+                else
+                    $(this).parent().parent().find(".flipper").css({"transform": "none"});
+            });
+            $(".card").mouseout(function() {
+                $(this).find('.flipper').css({"transform": "none"});
+            })
         });
     });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
