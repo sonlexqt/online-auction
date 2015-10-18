@@ -1,7 +1,7 @@
 var servicesModule = angular.module('dkmhApp.Services', []);
 
-servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location', '$firebaseObject', function($firebaseAuth, $rootScope, $location, $firebaseObject){
-    var ref = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+servicesModule.factory("AuthService", ["$firebaseAuth", '$rootScope', '$location', '$firebaseObject', 'CONSTANTS', function($firebaseAuth, $rootScope, $location, $firebaseObject, CONSTANTS){
+    var ref = new Firebase(CONSTANTS.FIREBASE_REF);
     var firebaseAuth = $firebaseAuth(ref);
 
     var _register = function(registerEmail, registerPassword, registerRetypePassword){

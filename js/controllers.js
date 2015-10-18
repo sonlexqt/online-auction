@@ -20,14 +20,14 @@ controllersModule.controller('SignInController', ['$scope', 'AuthService', funct
     }
 }]);
 
-controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('MyItemsController', ['$scope', '$rootScope', '$firebaseArray', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.myItems = $firebaseArray(firebaseRef.child('items').orderByChild("ownerId").equalTo($rootScope.currentUser.uid));
 }]);
 
-controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', function($scope, $rootScope, $firebaseArray, filepickerService) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$firebaseArray', 'filepickerService', 'CONSTANTS', function($scope, $rootScope, $firebaseArray, filepickerService, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
     $scope.pickImage = function() {
         filepickerService.pick({
                 mimetype: 'image/*',
@@ -56,7 +56,7 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             ownerEmail: $rootScope.currentUser.email,
             status: 'active'
         };
-        $rootScope.loadingMessage = 'Adding new item'
+        $rootScope.loadingMessage = 'Adding new item';
         $firebaseArray(firebaseRef.child('items')).$add(item).then(function(ref) {
             $scope.itemName = '';
             $scope.itemDescription = '';
@@ -67,14 +67,14 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             swal({
                 title: 'Success',
                 text: 'Your new item is ready for bidding!',
-                type: 'success',
+                type: 'success'
             });
         });
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', function($scope, $rootScope, $firebaseArray, $location, $timeout) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS', '$firebaseObject', function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS, $firebaseObject) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
 
@@ -83,6 +83,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     $scope.allItems.$loaded(function(data) {
         $rootScope.loadingMessage = null;
         $timeout(function() {
+            // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
                 speed: 500,
@@ -161,7 +162,7 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
                 // confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, Place my Bid!",
                 closeOnConfirm: false,
-                html: true,
+                html: true
             }, function() {
                 $scope.submitBid();
                 swal({
@@ -180,12 +181,76 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
             currentBuyerId: $rootScope.currentUser.uid,
             currentBuyerEmail: $rootScope.currentUser.email
         });
-        // $scope.$apply();
     };
+
+    $scope.moveToExpired = function(itemId){
+        // TODO need a better way to retrieve the about-to-expired item
+        var itemToBeExpired = null;
+        for (var i = 0; i<$scope.allItems.length; i++){
+            if ($scope.allItems[i].$id == itemId){
+                itemToBeExpired = $scope.allItems[i];
+                break;
+            }
+        }
+        if (itemToBeExpired.status == 'active' && itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing && !itemToBeExpired.isFinished){
+            // TODO XIN
+            console.log('Current item price: ' + itemToBeExpired.currentPrice);
+            var currentBuyerId = itemToBeExpired.currentBuyerId;
+            var ownerId = itemToBeExpired.ownerId;
+            // Check if currentBuyerId's balance is more than current item price
+            firebaseRef.child('items').child(itemId).update({
+                isProcessing: true
+            }, function(err){
+                if (err) console.error(err);
+                var buyerObject = $firebaseObject(firebaseRef.child('users').child(currentBuyerId));
+                buyerObject.$loaded(function(data){
+                    if (buyerObject.balance > itemToBeExpired.currentPrice){
+                        // Update item status to 'expired'
+                        firebaseRef.child('items').child(itemId).update({
+                            status: 'expired'
+                        }, function(err){
+                            if (err) console.error(err);
+                            else {
+                                var ownerObject= $firebaseObject(firebaseRef.child('users').child(ownerId));
+                                ownerObject.$loaded(function(data){
+                                    var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
+                                    // TODO XIN
+                                    console.log('oldOwnerBalance: ' + ownerObject.balance);
+                                    console.log('newOwnerBalance: ' + newOwnerBalance);
+                                    firebaseRef.child('users').child(ownerId).update({
+                                        balance: newOwnerBalance
+                                    }, function (err){
+                                        if (err) console.error(err);
+                                        else {
+                                            var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
+                                            // TODO XIN
+                                            console.log('oldBuyerBalance: ' + buyerObject.balance);
+                                            console.log('newBuyerBalance: ' + newBuyerBalance);
+                                            firebaseRef.child('users').child(currentBuyerId).update({
+                                                balance: newBuyerBalance
+                                            }, function(err){
+                                                if (err) console.error(err);
+                                                firebaseRef.child('items').child(itemId).update({
+                                                    isProcessing: false,
+                                                    isFinished: true
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    } else {
+                        // TODO handle this case: the buyer doesn't have enough funds
+                    }
+                });
+            });
+        }
+    }
 }]);
 
-controllersModule.controller('DepositController', ['$scope', '$rootScope', function($scope, $rootScope) {
-    var firebaseRef = new Firebase('https://ass1-ec-online-auction.firebaseio.com');
+controllersModule.controller('DepositController', ['$scope', '$rootScope', 'CONSTANTS',function($scope, $rootScope, CONSTANTS) {
+    var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.updateDeposit = function() {
         var newBalance = $rootScope.currentUser.balance + $scope.depositAmount;
