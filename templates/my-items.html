@@ -1,41 +1,99 @@
 <div class="row" ng-controller="MyItemsController">
-    <div class="col-md-12 col-lg-12 col-xs-12">
-        <h1>My Items</h1>
-        <hr/>
-        <table>
+    <div class="table-container">
+        <!-- My active items -->
+        <table class="my-items-table">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Expired Date</th>
-                    <th>Starting Price</th>
-                    <th>Current Price</th>
-                    <th>Status</th>
-                    <th>BuyerEmail</th>
-                    <th>Action</th>
-                </tr>
+            <tr class="table-header active">
+                <td colspan="9">
+                    MY ACTIVE ITEMS
+                </td>
+            </tr>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Expired Date</th>
+                <th>Starting Price</th>
+                <th>Current Price</th>
+                <th>BuyerEmail</th>
+                <th>Action</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in myItems" data-myitemid="{{item.$id}}">
-                    <td>{{ $index + 1}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.description | semanticValue}}</td>
-                    <td>
-                        <img ng-src="{{item.image}}" class="my-item-image"/>
-                    </td>
-                    <td>{{item.expiredDate | readableDate}}</td>
-                    <td>{{item.startingPrice}}</td>
-                    <td>{{item.currentPrice}}</td>
-                    <td>{{item.status | semanticValue}}</td>
-                    <td>{{item.currentBuyerEmail | semanticValue}}</td>
-                    <td>
-                        <button>
-                            Remove
-                        </button>
-                    </td>
-                </tr>
+            <tr ng-if="myActiveItems.length == 0">
+                <td colspan="9" class="my-items-table-nodata">
+                    <h3>You have no active items
+                        <a href="/new-item"> add one now</a>
+                    </h3>
+                </td>
+            </tr>
+            <tr ng-repeat="item in myActiveItems" data-myitemid="{{item.$id}}">
+                <td>{{ $index + 1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.description | semanticValue}}</td>
+                <td>
+                    <img ng-src="{{item.image}}" class="my-item-image"/>
+                </td>
+                <td>{{item.expiredDate | readableDate}}</td>
+                <td>{{item.startingPrice}}</td>
+                <td>{{item.currentPrice}}</td>
+                <td>{{item.currentBuyerEmail | semanticValue}}</td>
+                <td>
+                    <button>
+                        Remove
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br/>
+        <br/>
+        <br/>
+        <!-- My expired items -->
+        <table class="my-items-table">
+            <thead>
+            <tr class="table-header expired">
+                <td colspan="9">
+                    MY EXPIRED ITEMS
+                </td>
+            </tr>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Expired Date</th>
+                <th>Starting Price</th>
+                <th>Current Price</th>
+                <th>BuyerEmail</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-if="myExpiredItems.length == 0">
+                <td colspan="9" class="my-items-table-nodata">
+                    <h3>You have no expired items</h3>
+                </td>
+            </tr>
+            <tr ng-repeat="item in myExpiredItems" data-myitemid="{{item.$id}}">
+                <td>{{ $index + 1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.description | semanticValue}}</td>
+                <td>
+                    <img ng-src="{{item.image}}" class="my-item-image"/>
+                </td>
+                <td>{{item.expiredDate | readableDate}}</td>
+                <td>{{item.startingPrice}}</td>
+                <td>{{item.currentPrice}}</td>
+                <td>{{item.currentBuyerEmail | semanticValue}}</td>
+                <td>
+                    <button>
+                        Remove
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

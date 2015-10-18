@@ -1,0 +1,53 @@
+<div ng-controller="ExpiredBidsController" class="scroll-wheel">
+    <ul class="card-list" ng-if="!loadingMessage">
+        <div ng-if="allExpiredItems.length == 0">
+            <h3>No expired bids...</h3>
+        </div>
+        <li ng-repeat="item in allExpiredItems" data-itemid="{{item.$id}}">
+            <div class="card-container">
+                <img src="images/price-marker.png" class="price-maker-bottom">
+                <div class="card">
+                    <div class="top-menu">
+                        <a class="button info-button" href="#">
+                            <img src="images/btn-info.png" title="Production details">
+                        </a>
+                    </div>
+                    <div class="flipper">
+                        <img class="preview" ng-src="{{item.image}}">
+                        <div class="description">
+                            {{item.description}}
+                        </div>
+                        <div class="card-panel">
+                            <a class="button bid-btn" href="#" title="Bid now" ng-click="setCurrentItem(item.$id, item.name, item.newPrice, item.currentPrice)"></a>
+                            <div class="item-name">
+                                <b>{{item.name | uppercase}}</b>
+                                <br>
+                                <timer end-time="item.expiredDate" id="{{item.$id}}" finish-callback="moveToExpired(item.$id)">{{days}} days, {{hours}} hs, {{minutes}} mins, {{seconds}} secs</timer>
+                            </div>
+                            <table class="timing">
+                                <tr>
+                                    <td class="start-date">{{item.startDate | dateOnly}}</td>
+                                    <td rowspan="2"><img src="images/icon-clock.png" style="position:relative;left:6px"></td>
+                                    <td class="end-date">{{item.expiredDate | dateOnly}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="start-time">{{item.startDate | timeOnly}}</td>
+                                    <td class="end-time">{{item.expiredDate | timeOnly}}</td>
+                                </tr>
+                            </table>
+                            <div class="price-box">
+                                <input type="number" class="input-price" ng-model="item.newPrice" placeholder="Your Bid">
+                            </div>
+                            <div class="bid-user">
+                                {{item.currentBuyerEmail | semanticValue}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="price">
+                    ${{item.currentPrice}}
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
