@@ -541,32 +541,52 @@ textarea {
 .table-header.active{
     text-align: center;
     font-size: 20px;
-    background-color: green;
+    background-color: #4bb549;
     color: white;
 }
 
 .table-header.expired{
     text-align: center;
     font-size: 20px;
-    background-color: red;
+    background-color: #db4337;
     color: white;
 }
 
 .my-items-table {
     border-collapse: collapse;
-    border: 1px solid black;
+    width: 835px;
+    margin: 20px auto;
+    display: block;
 }
-
+.my-items-table:first-child {
+    border: 1px solid #4bb549;
+}
+.my-items-table:first-child th, .my-items-table:first-child td {
+    border: 1px solid #4bb549;
+}
+.my-items-table:nth-child(2) {
+    border: 1px solid #db4337;
+}
+.my-items-table:nth-child(2) th, .my-items-table:nth-child(2) td {
+    border: 1px solid #db4337;
+}
 .my-items-table th {
-    border: 1px solid black;
     padding: 10px;
 }
-
 .my-items-table td {
-    border: 1px solid black;
     padding: 10px;
 }
-
+.my-items-table td button {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: #4bb549;
+    color: #ffffff;
+    padding: 10px;
+}
+.my-items-table td button:hover {
+    background-color: #399138;
+}
 .my-items-table-nodata{
     text-align: center;
 }
