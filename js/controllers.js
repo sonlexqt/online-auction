@@ -1,12 +1,12 @@
 var controllersModule = angular.module('dkmhApp.Controllers', []);
-
+// var loaded = false;
 controllersModule.controller('DKMHAppController', ['$scope', '$rootScope', 'AuthService',
     function($scope, $rootScope, AuthService) {
         $scope.doSignOut = function() {
             AuthService.signOut();
         }
     }
-]);
+    ]);
 
 controllersModule.controller('RegisterController', ['$scope', 'AuthService', function($scope, AuthService) {
     $scope.doRegister = function() {
@@ -32,14 +32,14 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
     $scope.pickImage = function() {
         filepickerService.pick({
-                mimetype: 'image/*',
-                services: ['COMPUTER']
-            },
-            function(result) {
-                $scope.itemImage = result.url;
-                console.log($scope.itemImage);
-                $scope.$apply();
-            }
+            mimetype: 'image/*',
+            services: ['COMPUTER']
+        },
+        function(result) {
+            $scope.itemImage = result.url;
+            console.log($scope.itemImage);
+            $scope.$apply();
+        }
         );
     };
 
@@ -105,7 +105,7 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
                 $(this).find('.bid-btn').css({"transform": "none"});
             })
         });
-    });
+});
 // <<<<<<< HEAD
 //     $scope.allItems.$watch(function(event) {
 //         console.log(event.event)
@@ -129,7 +129,7 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
 //             //     })
 //             // }, 5000);
 //         // }
-        
+
 // =======
 }]);
 
@@ -178,67 +178,78 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
             //    $(this).find(".bid-btn").css({"transform": "none"});
             //})
         });
+        loaded = true;
 // >>>>>>> 3893ff74152c17c401eeefd19f8b9d5aa8832d8e
-    });
-    //$scope.allActiveItems.$watch(function() {
-    //    // $scope.$apply();
-    //    $timeout(function() {
-    //        $(".scroll-wheel").jCarouselLite({
-    //            mouseWheel: true,
-    //            speed: 500,
-    //            circular: false
-    //        });
-    //        $(".info-button").on("click", function() {
-    //            if ($(this).parent().parent().find(".flipper").css("transform") == "none")
-    //                $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
-    //            else
-    //                $(this).parent().parent().find(".flipper").css({"transform": "none"});
-    //        });
-    //        $(".card").mouseout(function() {
-    //            $(this).find('.flipper').css({"transform": "none"});
-    //        })
-    //    });
-    //});
-    $scope.setCurrentItem = function (itemId, itemName, itemNewPrice, itemCurrentPrice) {
-        if (!$rootScope.currentUser) {
-            swal({
-                title: 'Not signed-in',
-                text: 'Please sign in before bidding for items !',
-                type: 'error'
-            }, function () {
-                $rootScope.$apply(function () {
-                    $location.path('/sign-in');
-                });
+});
+// $scope.allActiveItems.$watch(function(event) {
+       // $scope.$apply();
+    // $timeout(function() {
+        // if (event.event == "child_added" && loaded == true) {
+        //     // debugger;
+        //     console.log("zozo")
+        //     $(".scroll-wheel").jCarouselLite({
+        //         mouseWheel: true,
+        //         speed: 500,
+        //         circular: false
+        //     });
+        //     $(".info-button").on("click", function() {
+        //         if ($(this).parent().parent().find(".flipper").css("transform") == "none"){
+        //             $(this).parent().parent().find(".flipper").css({"transform": "rotateY(180deg)"});
+        //             $(this).parent().parent().find(".bid-btn").css({"transform": "rotateY(180deg)"});
+        //         }
+        //         else {
+        //             $(this).parent().parent().find(".flipper").css({"transform": "none"});
+        //             $(this).parent().parent().find(".bid-btn").css({"transform": "none"});
+        //         }
+        //     });
+        //     $(".card").mouseout(function() {
+        //         $(this).find('.flipper').css({"transform": "none"});
+        //         $(this).find(".bid-btn").css({"transform": "none"});
+        //     })
+        // }
+
+    // }, 1500);
+   // });
+$scope.setCurrentItem = function (itemId, itemName, itemNewPrice, itemCurrentPrice) {
+    if (!$rootScope.currentUser) {
+        swal({
+            title: 'Not signed-in',
+            text: 'Please sign in before bidding for items !',
+            type: 'error'
+        }, function () {
+            $rootScope.$apply(function () {
+                $location.path('/sign-in');
             });
-        } else if (!itemNewPrice) {
-            swal({
-                title: 'Invalid Value',
-                text: 'Please enter a valid value!',
-                type: 'error'
-            });
-        } else if (itemNewPrice > $rootScope.currentUser.balance) {
-            swal({
-                title: 'Not enough budget',
-                text: 'Please deposit before continuing!',
-                type: 'error'
-            });
-        } else if (itemNewPrice <= itemCurrentPrice) {
-            swal({
-                title: 'Invalid value',
-                text: 'Please bid a value greater than current item price!',
-                type: 'error'
-            });
-        } else {
-            $scope.currentItem = {
-                id: itemId,
-                name: itemName,
-                value: itemNewPrice
-            };
-            swal({
-                title: "Are you sure?",
-                text: 'Submit bid for <b>' + $scope.currentItem.name + '</b> for <b>$' + $scope.currentItem.value + '</b>?',
-                type: 'info',
-                showCancelButton: true,
+        });
+    } else if (!itemNewPrice) {
+        swal({
+            title: 'Invalid Value',
+            text: 'Please enter a valid value!',
+            type: 'error'
+        });
+    } else if (itemNewPrice > $rootScope.currentUser.balance) {
+        swal({
+            title: 'Not enough budget',
+            text: 'Please deposit before continuing!',
+            type: 'error'
+        });
+    } else if (itemNewPrice <= itemCurrentPrice) {
+        swal({
+            title: 'Invalid value',
+            text: 'Please bid a value greater than current item price!',
+            type: 'error'
+        });
+    } else {
+        $scope.currentItem = {
+            id: itemId,
+            name: itemName,
+            value: itemNewPrice
+        };
+        swal({
+            title: "Are you sure?",
+            text: 'Submit bid for <b>' + $scope.currentItem.name + '</b> for <b>$' + $scope.currentItem.value + '</b>?',
+            type: 'info',
+            showCancelButton: true,
                 // confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, Place my Bid!",
                 closeOnConfirm: false,
@@ -251,20 +262,25 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                     type: 'success'
                 });
             });
-        }
+    }
 
-    };
+};
 
-    $scope.submitBid = function () {
-        firebaseRef.child('active-items').child($scope.currentItem.id).update({
-            currentPrice: $scope.currentItem.value,
-            currentBuyerId: $rootScope.currentUser.uid,
-            currentBuyerEmail: $rootScope.currentUser.email
-        });
-    };
+$scope.submitBid = function () {
+    firebaseRef.child('active-items').child($scope.currentItem.id).update({
+        currentPrice: $scope.currentItem.value,
+        currentBuyerId: $rootScope.currentUser.uid,
+        currentBuyerEmail: $rootScope.currentUser.email
+    });
+};
 
+// <<<<<<< HEAD
+// $scope.moveToExpired = function (itemId) {
+//         // TODO need a better way to retrieve the about-to-expired item
+// =======
     $scope.moveToExpired = function (itemId) {
         // TODO need a better way to retrieve the itemToBeExpired
+// >>>>>>> 5e91e5083225d0190802b6c54e5f0b7226c386d5
         var itemToBeExpired = null;
         for (var i = 0; i < $scope.allActiveItems.length; i++) {
             if ($scope.allActiveItems[i].$id == itemId) {
@@ -337,16 +353,16 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                                             });
                                         });
                                     });
-                                }
-                            });
-                        })
-                    } else {
+}
+});
+})
+} else {
                         // TODO handle this case: the buyer doesn't have enough funds
                     }
                 });
-            });
-        }
-    };
+});
+}
+};
 }]);
 
 controllersModule.controller('DepositController', ['$scope', '$rootScope', 'CONSTANTS',function($scope, $rootScope, CONSTANTS) {
