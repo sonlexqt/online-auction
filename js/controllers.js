@@ -73,7 +73,7 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
     };
 }]);
 
-controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS',function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS) {
+controllersModule.controller('MainController', ['$scope', '$rootScope', '$firebaseArray', '$location', '$timeout', 'CONSTANTS', '$firebaseObject', function($scope, $rootScope, $firebaseArray, $location, $timeout, CONSTANTS, $firebaseObject) {
     var firebaseRef = new Firebase(CONSTANTS.FIREBASE_REF);
 
     $scope.allItems = $firebaseArray(firebaseRef.child('items').orderByChild("expiredDate"));
@@ -155,7 +155,68 @@ controllersModule.controller('MainController', ['$scope', '$rootScope', '$fireba
     };
 
     $scope.moveToExpired = function(itemId){
-        console.log(itemId + ' is expired !');
+        // TODO need a better way to retrieve the about-to-expired item
+        var itemToBeExpired = null;
+        for (var i = 0; i<$scope.allItems.length; i++){
+            if ($scope.allItems[i].$id == itemId){
+                itemToBeExpired = $scope.allItems[i];
+                break;
+            }
+        }
+        if (itemToBeExpired.status == 'active' && itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing && !itemToBeExpired.isFinished){
+            // TODO XIN
+            console.log('Current item price: ' + itemToBeExpired.currentPrice);
+            var currentBuyerId = itemToBeExpired.currentBuyerId;
+            var ownerId = itemToBeExpired.ownerId;
+            // Check if currentBuyerId's balance is more than current item price
+            firebaseRef.child('items').child(itemId).update({
+                isProcessing: true
+            }, function(err){
+                if (err) console.error(err);
+                var buyerObject = $firebaseObject(firebaseRef.child('users').child(currentBuyerId));
+                buyerObject.$loaded(function(data){
+                    if (buyerObject.balance > itemToBeExpired.currentPrice){
+                        // Update item status to 'expired'
+                        firebaseRef.child('items').child(itemId).update({
+                            status: 'expired'
+                        }, function(err){
+                            if (err) console.error(err);
+                            else {
+                                var ownerObject= $firebaseObject(firebaseRef.child('users').child(ownerId));
+                                ownerObject.$loaded(function(data){
+                                    var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
+                                    // TODO XIN
+                                    console.log('oldOwnerBalance: ' + ownerObject.balance);
+                                    console.log('newOwnerBalance: ' + newOwnerBalance);
+                                    firebaseRef.child('users').child(ownerId).update({
+                                        balance: newOwnerBalance
+                                    }, function (err){
+                                        if (err) console.error(err);
+                                        else {
+                                            var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
+                                            // TODO XIN
+                                            console.log('oldBuyerBalance: ' + buyerObject.balance);
+                                            console.log('newBuyerBalance: ' + newBuyerBalance);
+                                            firebaseRef.child('users').child(currentBuyerId).update({
+                                                balance: newBuyerBalance
+                                            }, function(err){
+                                                if (err) console.error(err);
+                                                firebaseRef.child('items').child(itemId).update({
+                                                    isProcessing: false,
+                                                    isFinished: true
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    } else {
+                        // TODO handle this case: the buyer doesn't have enough funds
+                    }
+                });
+            });
+        }
     }
 }]);
 
