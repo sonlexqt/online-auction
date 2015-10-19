@@ -5,6 +5,7 @@
 
 body {
     background-color: #39C;
+    height: 626px;
 }
 
 @font-face {
@@ -165,7 +166,8 @@ ul.custom-nav li .director {
 
 .body {
     background-color: #fff;
-    min-height: 200px;
+    /*min-height: 200px;*/
+    height: 423px;
 }
 
 .body-inner {
@@ -185,6 +187,7 @@ ul.card-list li {
 
 .scroll-wheel {
     margin: 0 auto;
+    position: relative;
 }
 
 .card-container {
@@ -589,4 +592,7 @@ textarea {
 }
 .my-items-table-nodata{
     text-align: center;
+}
+.loading-container {
+    margin-top: 100px;
 }

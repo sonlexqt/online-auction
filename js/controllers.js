@@ -87,7 +87,7 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 500,
+                speed: 200,
                 circular: false
             });
             $(".info-button").on("click", function() {
@@ -159,7 +159,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 500,
+                speed: 200,
                 circular: false
             });
             $(".info-button").on("click", function () {
@@ -272,6 +272,7 @@ $scope.submitBid = function () {
         currentBuyerId: $rootScope.currentUser.uid,
         currentBuyerEmail: $rootScope.currentUser.email
     });
+
 };
 
 // <<<<<<< HEAD
