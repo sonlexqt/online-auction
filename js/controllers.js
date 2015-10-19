@@ -237,6 +237,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
     // }, 1500);
     // });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
+        itemNewPrice = parseFloat(itemNewPrice);
         if (!$rootScope.currentUser) {
             swal({
                 title: 'Not signed-in',
