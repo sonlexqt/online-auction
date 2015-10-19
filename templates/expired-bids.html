@@ -4,7 +4,7 @@
             <h3>No expired bids...</h3>
         </div>
         <li ng-repeat="item in allExpiredItems" data-itemid="{{item.$id}}">
-            <div class="card-container">
+            <div class="card-container expired-card">
                 <img src="images/price-marker.png" class="price-maker-bottom">
                 <div class="card">
                     <div class="top-menu">
@@ -18,11 +18,11 @@
                             {{item.description}}
                         </div>
                         <div class="card-panel">
-                            <a class="button bid-btn" href="#" title="Bid now" ng-click="setCurrentItem(item.$id, item.name, item.newPrice, item.currentPrice)"></a>
+                            <br><br><br>
                             <div class="item-name">
                                 <b>{{item.name | uppercase}}</b>
                                 <br>
-                                <timer end-time="item.expiredDate" id="{{item.$id}}" finish-callback="moveToExpired(item.$id)">{{days}} days, {{hours}} hs, {{minutes}} mins, {{seconds}} secs</timer>
+                                <br>
                             </div>
                             <table class="timing">
                                 <tr>
@@ -35,11 +35,9 @@
                                     <td class="end-time">{{item.expiredDate | timeOnly}}</td>
                                 </tr>
                             </table>
-                            <div class="price-box">
-                                <input type="number" class="input-price" ng-model="item.newPrice" placeholder="Your Bid">
-                            </div>
                             <div class="bid-user">
-                                {{item.currentBuyerEmail | semanticValue}}
+                                <br>
+                                <b>Winner:</b> {{item.currentBuyerEmail | semanticValue}}
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <div class="row" ng-controller="MyItemsController">
     <div class="table-container">
-        <!-- My active items -->
-        <table class="my-items-table active-table">
+        <!-- My active items --> 
+        <table class="my-items-table active-table" width="100%">
             <thead>
             <tr class="table-header active">
                 <td colspan="9">
@@ -17,12 +17,11 @@
                 <th>Starting Price</th>
                 <th>Current Price</th>
                 <th>BuyerEmail</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-if="myActiveItems.length == 0">
-                <td colspan="9" class="my-items-table-nodata">
+                <td colspan="8" class="my-items-table-nodata">
                     <h3>You have no active items
                         <a href="/new-item"> add one now</a>
                     </h3>
@@ -31,7 +30,7 @@
             <tr ng-repeat="item in myActiveItems" data-myitemid="{{item.$id}}">
                 <td>{{ $index + 1}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.description | semanticValue}}</td>
+                <td title="{{item.description}}">{{item.description | shorten}}</td>
                 <td>
                     <img ng-src="{{item.image}}" class="my-item-image"/>
                 </td>
@@ -39,20 +38,15 @@
                 <td>{{item.startingPrice}}</td>
                 <td>{{item.currentPrice}}</td>
                 <td>{{item.currentBuyerEmail | semanticValue}}</td>
-                <td>
-                    <button>
-                        Remove
-                    </button>
-                </td>
             </tr>
             </tbody>
         </table>
 
         <!-- My expired items -->
-        <table class="my-items-table expired-table">
+        <table class="my-items-table expired-table" width="100%">
             <thead>
             <tr class="table-header expired">
-                <td colspan="9">
+                <td colspan="8">
                     MY EXPIRED ITEMS
                 </td>
             </tr>
@@ -65,7 +59,6 @@
                 <th>Starting Price</th>
                 <th>Current Price</th>
                 <th>BuyerEmail</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -77,7 +70,7 @@
             <tr ng-repeat="item in myExpiredItems" data-myitemid="{{item.$id}}">
                 <td>{{ $index + 1}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.description | semanticValue}}</td>
+                <td title="{{item.description}}">{{item.description | shorten}}</td>
                 <td>
                     <img ng-src="{{item.image}}" class="my-item-image"/>
                 </td>
@@ -85,11 +78,6 @@
                 <td>{{item.startingPrice}}</td>
                 <td>{{item.currentPrice}}</td>
                 <td>{{item.currentBuyerEmail | semanticValue}}</td>
-                <td>
-                    <button>
-                        Remove
-                    </button>
-                </td>
             </tr>
             </tbody>
         </table>
