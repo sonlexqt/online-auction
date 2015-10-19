@@ -115,14 +115,6 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
                     });
                 }
             });
-            $(".card").mouseout(function() {
-                $(this).find('.flipper').css({
-                    "transform": "none"
-                });
-                $(this).find('.bid-btn').css({
-                    "transform": "none"
-                });
-            })
         });
     });
     // <<<<<<< HEAD
