@@ -305,6 +305,14 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                                 currentPrice: Number($scope.currentItem.value),
                                 currentBuyerId: $rootScope.currentUser.uid,
                                 currentBuyerEmail: $rootScope.currentUser.email
+                            }, function(err){
+                                if (err) console.error(err);
+                                swal({
+                                    title: 'Success',
+                                    text: 'Your bid has been placed!',
+                                    type: 'success'
+                                });
+                                $scope.$apply();
                             });
                         });
                     });
@@ -318,19 +326,20 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                         balance: Number(newBuyerObjectData.balance) - Number($scope.currentItem.value)
                     }, function(err){
                         if (err) console.error(err);
-                    });
-                    // Update lai thong tin currentPrice, currentBuyer cho item
-                    firebaseRef.child('active-items').child($scope.currentItem.id).update({
-                        currentPrice: Number($scope.currentItem.value),
-                        currentBuyerId: $rootScope.currentUser.uid,
-                        currentBuyerEmail: $rootScope.currentUser.email
-        }, function() {
-            $scope.$apply();
-            swal({
-                title: 'Success',
-                text: 'Your bid has been placed!',
-                type: 'success'
-            });
+                        // Update lai thong tin currentPrice, currentBuyer cho item
+                        firebaseRef.child('active-items').child($scope.currentItem.id).update({
+                            currentPrice: Number($scope.currentItem.value),
+                            currentBuyerId: $rootScope.currentUser.uid,
+                            currentBuyerEmail: $rootScope.currentUser.email
+                        }, function(err) {
+                            if (err) console.error(err);
+                            swal({
+                                title: 'Success',
+                                text: 'Your bid has been placed!',
+                                type: 'success'
+                            });
+                            $scope.$apply();
+                        });
                     });
                 });
             }
