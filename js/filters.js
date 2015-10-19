@@ -37,3 +37,10 @@ filtersModule.filter('timeOnly', function() {
         return moment(dateObjectFromInput).format('HH') + 'h' + moment(dateObjectFromInput).format('mm');
     }
 });
+
+filtersModule.filter('shorten', function() {
+    return function(input) {
+        if (!input) return 'None';
+        return input.substr(0,30) + ' ...';
+    }
+});
