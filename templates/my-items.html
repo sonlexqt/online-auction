@@ -27,7 +27,7 @@
                     </h3>
                 </td>
             </tr>
-            <tr ng-repeat="item in myActiveItems" data-myitemid="{{item.$id}}">
+            <tr  ng-if="myActiveItems.length > 0" ng-repeat="item in myActiveItems" data-myitemid="{{item.$id}}">
                 <td>{{ $index + 1}}</td>
                 <td>{{item.name}}</td>
                 <td title="{{item.description}}">{{item.description | shorten}}</td>
@@ -67,7 +67,7 @@
                     <h3>You have no expired items</h3>
                 </td>
             </tr>
-            <tr ng-repeat="item in myExpiredItems" data-myitemid="{{item.$id}}">
+            <tr  ng-if="myExpiredItems.length > 0" ng-repeat="item in myExpiredItems" data-myitemid="{{item.$id}}">
                 <td>{{ $index + 1}}</td>
                 <td>{{item.name}}</td>
                 <td title="{{item.description}}">{{item.description | shorten}}</td>
