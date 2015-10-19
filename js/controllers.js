@@ -57,6 +57,14 @@ controllersModule.controller('NewItemController', ['$scope', '$rootScope', '$fir
             ownerId: $rootScope.currentUser.uid,
             ownerEmail: $rootScope.currentUser.email
         };
+        if (item.expiredDate <= item.startDate) {
+            swal({
+                title: 'Invalid Expiry date',
+                text: 'Please select a time in future!',
+                type: 'error'
+            });
+            return;
+        }
         $rootScope.loadingMessage = 'Adding new item';
         $firebaseArray(firebaseRef.child('active-items')).$add(item).then(function(ref) {
             $scope.itemName = '';
@@ -87,7 +95,7 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 200,
+                speed: 500,
                 circular: false
             });
             $(".info-button").on("click", function() {
@@ -107,14 +115,6 @@ controllersModule.controller('ExpiredBidsController', ['$scope', '$rootScope', '
                     });
                 }
             });
-            $(".card").mouseout(function() {
-                $(this).find('.flipper').css({
-                    "transform": "none"
-                });
-                $(this).find('.bid-btn').css({
-                    "transform": "none"
-                });
-            })
         });
     });
     // <<<<<<< HEAD
@@ -170,7 +170,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
             // TODO need to detect precisely when the DOM is fully rendered
             $(".scroll-wheel").jCarouselLite({
                 mouseWheel: true,
-                speed: 200,
+                speed: 500,
                 circular: false
             });
             $(".info-button").on("click", function() {
@@ -229,6 +229,7 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
     // }, 1500);
     // });
     $scope.setCurrentItem = function(itemId, itemName, itemNewPrice, itemCurrentPrice) {
+        itemNewPrice = parseFloat(itemNewPrice);
         if (!$rootScope.currentUser) {
             swal({
                 title: 'Not signed-in',
@@ -274,11 +275,6 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                 html: true
             }, function() {
                 $scope.submitBid();
-                swal({
-                    title: 'Success',
-                    text: 'Your bid has been placed!',
-                    type: 'success'
-                });
             });
         }
 
@@ -328,6 +324,13 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
                         currentPrice: Number($scope.currentItem.value),
                         currentBuyerId: $rootScope.currentUser.uid,
                         currentBuyerEmail: $rootScope.currentUser.email
+        }, function() {
+            $scope.$apply();
+            swal({
+                title: 'Success',
+                text: 'Your bid has been placed!',
+                type: 'success'
+            });
                     });
                 });
             }
