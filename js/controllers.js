@@ -285,17 +285,55 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
     };
 
     $scope.submitBid = function() {
-        firebaseRef.child('active-items').child($scope.currentItem.id).update({
-            currentPrice: $scope.currentItem.value,
-            currentBuyerId: $rootScope.currentUser.uid,
-            currentBuyerEmail: $rootScope.currentUser.email
+        var currentItemObject = $firebaseObject(firebaseRef.child('active-items').child($scope.currentItem.id));
+        currentItemObject.$loaded(function(currentItemData){
+            if (currentItemData.currentBuyerId){
+                // This item was bid before
+                var currentIBuyerObject = $firebaseObject(firebaseRef.child('users').child(currentItemData.currentBuyerId));
+                currentIBuyerObject.$loaded(function(currentBuyerObjectData){
+                    // Cong lai tien` cho nguoi` bid truoc' kia
+                    firebaseRef.child('users').child(currentItemData.currentBuyerId).update({
+                        balance: Number(currentBuyerObjectData.balance) + Number(currentItemData.currentPrice)
+                    }, function(err){
+                        if (err) console.error(err);
+                        var newBuyerObject = $firebaseObject(firebaseRef.child('users').child($rootScope.currentUser.uid));
+                        // Tru tien` cua nguoi` dang bid hien tai
+                        newBuyerObject.$loaded(function(newBuyerObjectData){
+                            firebaseRef.child('users').child($rootScope.currentUser.uid).update({
+                                balance: Number(newBuyerObjectData.balance) - Number($scope.currentItem.value)
+                            }, function(err){
+                                if (err) console.error(err);
+                            });
+                            // Update lai thong tin currentPrice, currentBuyer cho item
+                            firebaseRef.child('active-items').child($scope.currentItem.id).update({
+                                currentPrice: Number($scope.currentItem.value),
+                                currentBuyerId: $rootScope.currentUser.uid,
+                                currentBuyerEmail: $rootScope.currentUser.email
+                            });
+                        });
+                    });
+                });
+            } else {
+                // This is the first time the item be bid
+                var newBuyerObject = $firebaseObject(firebaseRef.child('users').child($rootScope.currentUser.uid));
+                // Tru tien` cua nguoi` dang bid hien tai
+                newBuyerObject.$loaded(function(newBuyerObjectData){
+                    firebaseRef.child('users').child($rootScope.currentUser.uid).update({
+                        balance: Number(newBuyerObjectData.balance) - Number($scope.currentItem.value)
+                    }, function(err){
+                        if (err) console.error(err);
+                    });
+                    // Update lai thong tin currentPrice, currentBuyer cho item
+                    firebaseRef.child('active-items').child($scope.currentItem.id).update({
+                        currentPrice: Number($scope.currentItem.value),
+                        currentBuyerId: $rootScope.currentUser.uid,
+                        currentBuyerEmail: $rootScope.currentUser.email
+                    });
+                });
+            }
         });
     };
 
-    // <<<<<<< HEAD
-    // $scope.moveToExpired = function (itemId) {
-    //         // TODO need a better way to retrieve the about-to-expired item
-    // =======
     $scope.moveToExpired = function(itemId) {
         // TODO need a better way to retrieve the itemToBeExpired
         // >>>>>>> 5e91e5083225d0190802b6c54e5f0b7226c386d5
@@ -329,55 +367,37 @@ controllersModule.controller('ActiveBidsController', ['$scope', '$rootScope', '$
         // Case 2: Someone bid for this item
         if (itemToBeExpired.currentBuyerId && !itemToBeExpired.isProcessing) {
             console.log('Current item price: ' + itemToBeExpired.currentPrice);
-            var currentBuyerId = itemToBeExpired.currentBuyerId;
             var ownerId = itemToBeExpired.ownerId;
-            // Check if currentBuyerId's balance is more than current item price
             firebaseRef.child('active-items').child(itemId).update({
                 isProcessing: true
             }, function(err) {
                 if (err) console.error(err);
-                var buyerObject = $firebaseObject(firebaseRef.child('users').child(currentBuyerId));
-                buyerObject.$loaded(function(data) {
-                    if (buyerObject.balance > itemToBeExpired.currentPrice) {
-                        var ownerObject = $firebaseObject(firebaseRef.child('users').child(ownerId));
-                        ownerObject.$loaded(function(data) {
-                            var newOwnerBalance = ownerObject.balance + itemToBeExpired.currentPrice;
-                            console.log('oldOwner(' + itemToBeExpired.ownerEmail + ') balance: ' + ownerObject.balance);
-                            console.log('newOwnerBalance: ' + newOwnerBalance);
-                            firebaseRef.child('users').child(ownerId).update({
-                                balance: newOwnerBalance
-                            }, function(err) {
+                var ownerObject = $firebaseObject(firebaseRef.child('users').child(ownerId));
+                ownerObject.$loaded(function(data) {
+                    var newOwnerBalance = Number(ownerObject.balance) + itemToBeExpired.currentPrice;
+                    console.log('oldOwner(' + itemToBeExpired.ownerEmail + ') balance: ' + ownerObject.balance);
+                    console.log('newOwnerBalance: ' + newOwnerBalance);
+                    firebaseRef.child('users').child(ownerId).update({
+                        balance: newOwnerBalance
+                    }, function(err) {
+                        if (err) console.error(err);
+                        else {
+                            firebaseRef.child('active-items').child(itemId).remove(function(err) {
                                 if (err) console.error(err);
-                                else {
-                                    var newBuyerBalance = buyerObject.balance - itemToBeExpired.currentPrice;
-                                    console.log('oldBuyer(' + itemToBeExpired.currentBuyerEmail + ') balance: ' + buyerObject.balance);
-                                    console.log('newBuyerBalance: ' + newBuyerBalance);
-                                    firebaseRef.child('users').child(currentBuyerId).update({
-                                        balance: newBuyerBalance
-                                    }, function(err) {
-                                        if (err) console.error(err);
-                                        // Remove the toBeExpired item from the 'active-items' collection
-                                        firebaseRef.child('active-items').child(itemId).remove(function(err) {
-                                            if (err) console.error(err);
-                                            // Remove some firebase's keys
-                                            var newExpiredItem = itemToBeExpired;
-                                            delete newExpiredItem["__proto__"];
-                                            delete newExpiredItem["$id"];
-                                            delete newExpiredItem["$$hashKey"];
-                                            delete newExpiredItem["$priority"];
-                                            // Push the toBeExpired item to the 'expired-items' collection
-                                            firebaseRef.child('expired-items').push(newExpiredItem, function(err) {
-                                                if (err) console.log(error);
-                                            });
-                                        });
-                                    });
-                                }
+                                // Remove some firebase's keys
+                                var newExpiredItem = itemToBeExpired;
+                                delete newExpiredItem["__proto__"];
+                                delete newExpiredItem["$id"];
+                                delete newExpiredItem["$$hashKey"];
+                                delete newExpiredItem["$priority"];
+                                // Push the toBeExpired item to the 'expired-items' collection
+                                firebaseRef.child('expired-items').push(newExpiredItem, function(err) {
+                                    if (err) console.log(error);
+                                });
                             });
-                        })
-                    } else {
-                        // TODO handle this case: the buyer doesn't have enough funds
-                    }
-                });
+                        }
+                    });
+                })
             });
         }
     };
